@@ -3,3 +3,6 @@ Release Notes for JdbcMySql 2.0
 
 2.0.24
 First release of JdbcMySql on GitHub.
+
+2.0.28
+.gitattributes added.
