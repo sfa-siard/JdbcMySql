@@ -1,8 +1,11 @@
-Release Notes for JdbcMySql 2.0
+Release Notes for JdbcMySql 2.1
 ===============================
 
-2.0.24
-First release of JdbcMySql on GitHub.
+2.1.0
+Release for JAVA 10
 
 2.0.28
 .gitattributes added.
+
+2.0.24
+First release of JdbcMySql on GitHub.
