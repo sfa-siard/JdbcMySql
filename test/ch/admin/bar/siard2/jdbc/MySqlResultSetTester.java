@@ -1162,6 +1162,26 @@ public class MySqlResultSetTester extends BaseResultSetTester
           else
             fail("Type Integer expected for "+tcd.getType()+"!");
         }
+        else if (tcd.getName().equals("CPNG"))
+        {
+          if ( o instanceof Blob)
+          {
+            Blob blob = (Blob)o;
+            assertTrue("Invalid value for "+tcd.getType()+"!",Arrays.equals((byte[])tcd.getValue(),blob.getBytes(1l,(int)blob.length())));
+          }
+          else
+            fail("Type Blob expected for "+tcd.getType()+"!");
+        }
+        else if (tcd.getName().equals("CFLAC"))
+        {
+          if ( o instanceof Blob)
+          {
+            Blob blob = (Blob)o;
+            assertTrue("Invalid value for "+tcd.getType()+"!",Arrays.equals((byte[])tcd.getValue(),blob.getBytes(1l,(int)blob.length())));
+          }
+          else
+            fail("Type Blob expected for "+tcd.getType()+"!");
+        }
         else
           fail("Unexpected column: "+tcd.getName()+"!");
       }

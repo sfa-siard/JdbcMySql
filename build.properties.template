@@ -44,3 +44,26 @@ dbpassword=testpwd
 dbauser=root
 dbapassword=rootpwd
 
+#-----------------------------------------------------------------------
+# BLOB sample files (same number of PNGs and FLACs, at most 10 per type)
+blobpng0=D:/SFPD/18/000001/18-000001A.png
+blobpng1=D:/SFPD/18/000001/18-000001B.png
+blobpng2=D:/SFPD/18/000002/18-000002A.png
+blobpng3=D:/SFPD/18/000002/18-000002B.png
+blobpng4=D:/SFPD/18/000003/18-000003A.png
+blobpng5=D:/SFPD/18/000003/18-000003B.png
+#blobpng6=D:/SFPD/18/000004/18-000004A.png
+#blobpng7=D:/SFPD/18/000004/18-000004B.png
+#blobpng8=D:/SFPD/18/000005/18-000005A.png
+#blobpng9=D:/SFPD/18/000005/18-000005B.png
+
+blobflac0=D:/SFPD/18/000001/18-000001A.png
+blobflac1=D:/SFPD/18/000001/18-000001B.png
+blobflac2=D:/SFPD/18/000002/18-000002A.png
+blobflac3=D:/SFPD/18/000002/18-000002B.png
+blobflac4=D:/SFPD/18/000003/18-000003A.png
+blobflac5=D:/SFPD/18/000003/18-000003B.png
+#blobflac6=D:/SFPD/18/000004/18-000004A.png
+#blobflac7=D:/SFPD/18/000004/18-000004B.png
+#blobflac8=D:/SFPD/18/000005/18-000005A.png
+#blobflac9=D:/SFPD/18/000005/18-000005B.png
