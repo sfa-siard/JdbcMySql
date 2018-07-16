@@ -25,7 +25,7 @@ public class MySqlBlobTester
   private List<String> _listFlacs = new ArrayList<String>();
 
   @Test
-  public void test()
+  public void test() 
   {
     try
     {
