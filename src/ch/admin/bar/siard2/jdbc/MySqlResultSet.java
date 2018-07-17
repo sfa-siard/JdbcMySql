@@ -15,6 +15,7 @@ import java.sql.*;
 
 import javax.xml.datatype.*;
 import javax.xml.parsers.*;
+
 import org.w3c.dom.*;
 import org.xml.sax.*;
 import com.vividsolutions.jts.geom.*;
@@ -409,14 +410,27 @@ public class MySqlResultSet
 		updateClob(columnIndex, x, length);
 	} /* updateNClob */
 
+  private void setNoBackslashEscapes(boolean bNoBackslashEscapes)
+    throws SQLException
+  {
+    String sSql = "ANSI";
+    if (bNoBackslashEscapes)
+      sSql = sSql + ",NO_BACKSLASH_ESCAPES";
+    sSql = "SET SESSION sql_mode = '"+sSql+"';";
+    Connection connNative = _conn.unwrap(Connection.class);
+    Statement stmt = connNative.createStatement();
+    stmt.executeUpdate(sSql);
+    stmt.close();
+  } /* setNoBackSlashEscapes */
+  
 	/* ------------------------------------------------------------------------ */
 	/** {@inheritDoc} */
 	@Override
 	public void insertRow() throws SQLException 
 	{
-    _conn.setNoBackslashEscapes(false);
+    setNoBackslashEscapes(false);
 		super.insertRow();
-    _conn.setNoBackslashEscapes(true);
+    setNoBackslashEscapes(true);
 	} /* insertRow */
 	
   /* ------------------------------------------------------------------------ */
@@ -424,9 +438,9 @@ public class MySqlResultSet
   @Override
   public void updateRow() throws SQLException 
   {
-    _conn.setNoBackslashEscapes(false);
+    setNoBackslashEscapes(false);
     super.updateRow();
-    _conn.setNoBackslashEscapes(true);
+    setNoBackslashEscapes(true);
   } /* updateRow */
   
 	/* ------------------------------------------------------------------------ */
@@ -623,5 +637,5 @@ public class MySqlResultSet
     super.close();
     stmt.removePrimaryColumn(_qiTable,_sPrimaryColumn);
   }
-
+  
 } /* class MySqlResultSet */

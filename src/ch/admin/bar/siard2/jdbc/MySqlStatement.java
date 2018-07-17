@@ -160,9 +160,6 @@ public class MySqlStatement extends BaseStatement implements Statement
       String sFrom = sNative.substring(i);
       sNative = sSelect + ",\r\n" +sPrimaryColumn+sFrom;
     }
-    if ((super.getResultSetType() == ResultSet.TYPE_FORWARD_ONLY) &&
-        (super.getResultSetConcurrency() == ResultSet.CONCUR_READ_ONLY))
-      super.setFetchSize(Integer.MIN_VALUE); // prevents loading the whole record set!
     MySqlResultSet rs = new MySqlResultSet(super.executeQuery(sNative),_conn);
     rs.setPrimaryColumn(_conn.getTableWithoutPrimaryKey(), sPrimaryColumn);
 		return rs;

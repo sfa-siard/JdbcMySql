@@ -43,7 +43,7 @@ public class MySqlDataSourceTester {
 		try {
 			Assert.assertSame("Invalid wrapper!", true, _dsMySql.isWrapperFor(DataSource.class));
 			DataSource dsWrapped = _dsMySql.unwrap(DataSource.class);
-			assertSame("Invalid wrapper class!", com.mysql.jdbc.jdbc2.optional.MysqlDataSource.class, dsWrapped.getClass());
+			assertSame("Invalid wrapper class!", com.mysql.cj.jdbc.MysqlDataSource.class, dsWrapped.getClass());
 		} catch(SQLException se) {
 			fail(se.getClass().getName() + ": " + se.getMessage());
 		}

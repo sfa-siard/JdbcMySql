@@ -12,7 +12,7 @@ package ch.admin.bar.siard2.jdbcx;
 
 import java.sql.*;
 import javax.sql.*;
-import com.mysql.jdbc.jdbc2.optional.*;
+import com.mysql.cj.jdbc.*;
 import ch.enterag.utils.logging.*;
 import ch.enterag.utils.jdbcx.*;
 import ch.admin.bar.siard2.jdbc.*;
@@ -22,15 +22,24 @@ import ch.admin.bar.siard2.jdbc.*;
  * MySqlDataSource implements a wrapped MySql DataSource
  * @author Simon Jutz
  */
-public class MySqlDataSource extends BaseDataSource implements DataSource {
+public class MySqlDataSource extends BaseDataSource implements DataSource 
+{
 	/** logger */
 	private static IndentLogger _il = IndentLogger.getIndentLogger(MySqlDataSource.class.getName());
 
 	/**
 	 * @param dsWrapped DataSource to be wrapped
 	 */
-	public MySqlDataSource() {
+	public MySqlDataSource() 
+	  throws SQLException
+	{
 		super(new MysqlDataSource());
+    com.mysql.cj.jdbc.MysqlDataSource ds = (com.mysql.cj.jdbc.MysqlDataSource)super.unwrap(DataSource.class);
+    ds.setUseCursorFetch(true);
+    ds.setDefaultFetchSize(1);
+    ds.setEnableEscapeProcessing(false);
+    ds.setProcessEscapeCodesForPrepStmts(false);
+    ds.setSessionVariables("sql_mode='ANSI,NO_BACKSLASH_ESCAPES'");
 	} /* constructor */
 
   /*------------------------------------------------------------------*/
@@ -47,6 +56,12 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
     setUrl(sUrl);
     setUser(sUser);
     setPassword(sPassword);
+    com.mysql.cj.jdbc.MysqlDataSource ds = (com.mysql.cj.jdbc.MysqlDataSource)super.unwrap(DataSource.class);
+    ds.setUseCursorFetch(true);
+    ds.setDefaultFetchSize(1);
+    ds.setEnableEscapeProcessing(false);
+    ds.setProcessEscapeCodesForPrepStmts(false);
+    ds.setSessionVariables("sqlmode='ANSI,NO_BACKSLASH_ESCAPES'");
   } /* constructor */
 	
 	/* ------------------------------------------------------------------------ */
@@ -54,7 +69,7 @@ public class MySqlDataSource extends BaseDataSource implements DataSource {
 	 * Returns a appropriately wrapped MySql Connection
 	 */
 	public Connection getConnection() throws SQLException {
-		return new MySqlConnection((com.mysql.jdbc.JDBC4Connection)super.getConnection());
+		return new MySqlConnection(super.getConnection());
 	} /* getConnection */
 	
 	/* ------------------------------------------------------------------------ */

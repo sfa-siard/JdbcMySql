@@ -95,4 +95,13 @@ public class MySqlResultSetMetaData extends BaseResultSetMetaData implements Res
 		return cls.getName();
 	} /* getColumnClassName */
 
+	@Override
+	public boolean isCaseSensitive(int column) throws SQLException
+	{
+	  /***
+    String sTypeName = super.getColumnTypeName(column);
+    System.out.print(sTypeName+":"+String.valueOf(super.isCaseSensitive(column))+"\t\n");
+    ***/
+    return super.isCaseSensitive(column);
+	}
 } /* class MySqlResultSetMetaData */

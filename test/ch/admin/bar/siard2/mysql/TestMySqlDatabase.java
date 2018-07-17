@@ -109,7 +109,7 @@ public class TestMySqlDatabase
 
     // NCHAR/NVARCHAR
     listCdSimple.add(new ColumnDefinition("CNCHAR_50","NCHAR(50)",TestUtils.getString(45)));
-    listCdSimple.add(new ColumnDefinition("CNVARCHAR_40000","NVARCHAR(40000)",TestUtils.getNString(5000)));
+    listCdSimple.add(new ColumnDefinition("CNVARCHAR_20000","NVARCHAR(20000)",TestUtils.getNString(5000)));
 
     // BINARY/VARBINARY
     listCdSimple.add(new ColumnDefinition("CBINARY_255","BINARY(255)",TestUtils.getBytes(100)));

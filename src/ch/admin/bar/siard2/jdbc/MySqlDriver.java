@@ -49,7 +49,7 @@ public class MySqlDriver extends BaseDriver implements Driver
 	public static void register()
 	{
 		// com.mysql.fabric.jdbc.FabricMySQLDriver is excluded in acceptsURL
-		try { BaseDriver.register(new MySqlDriver(), "com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/testschema"); }
+		try { BaseDriver.register(new MySqlDriver(), "com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/testschema"); }
 		catch(Exception e) { throw new Error(e); }
 	}
 
@@ -66,9 +66,20 @@ public class MySqlDriver extends BaseDriver implements Driver
 	 */
 	public Connection connect(String url, Properties info) throws SQLException {
 		_il.enter(url, info);
+		/* add/change properties */
+		if (info == null)
+		  info = new Properties();
+		/* avoid huge JAVA memory for large BLOBs */
+		info.setProperty("useCursorFetch", "true");
+		info.setProperty("defaultFetchSize", "1");
+		/* avoid escape processing */
+		info.setProperty("enableEscapeProcessing", "false");
+		info.setProperty("processEscapeCodesForPrepStmts", "false");
+		/* disable backslash escapes */
+		info.setProperty("sessionVariables", "sql_mode='ANSI,NO_BACKSLASH_ESCAPES'");
 		Connection conn = super.connect(url, info);
 		if (conn != null)
-			conn = new MySqlConnection((com.mysql.jdbc.JDBC4Connection)conn);
+			conn = new MySqlConnection(conn);
 		_il.exit(conn);
 		return conn;
 	} /* connect */

@@ -11,8 +11,6 @@ import ch.enterag.sqlparser.identifier.*;
 import ch.admin.bar.siard2.jdbcx.*;
 import ch.admin.bar.siard2.mysql.*;
 
-import org.junit.Test;
-
 public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester 
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();
@@ -64,10 +62,11 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester
 		catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
 	} /* setUpClass */
 
+  private Connection _conn = null;
+  
   private Connection closeResultSet()
     throws SQLException
   {
-    Connection conn = null;
     ResultSet rs = getResultSet();
     if (rs != null)
     {
@@ -77,20 +76,18 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester
         rs.close();
         setResultSetMetaData(null,null);
         if (!stmt.isClosed())
-        {
-          conn = stmt.getConnection();
           stmt.close();
-        }
+        _conn.commit();
       }
     }
-    return conn;
+    return _conn;
   } /* closeResultSet */
 
-  private void openResultSet(Connection conn, String sQuery)
+  private void openResultSet(String sQuery)
     throws SQLException
   {
     closeResultSet();
-    Statement stmt = conn.createStatement();
+    Statement stmt = _conn.createStatement();
     ResultSet rs = stmt.executeQuery(sQuery);
     ResultSetMetaData rsmd = rs.getMetaData();
     setResultSetMetaData(rsmd,rs);
@@ -104,32 +101,30 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester
 			dsMySql.setUrl(_sDB_URL);
 			dsMySql.setUser(_sDB_USER);
 			dsMySql.setPassword(_sDB_PASSWORD);
-			Connection conn = dsMySql.getConnection();
-			conn.setAutoCommit(false);
-      openResultSet(conn,_sNativeQuerySimple);
+			_conn = dsMySql.getConnection();
+			_conn.setAutoCommit(false);
+      openResultSet(_sNativeQuerySimple);
 		}
 		catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
 	}
 
-  @After
   @Override
+  @After
   public void tearDown()
- {
+  {
     try
     {
-      Connection conn = closeResultSet();
-      if (conn != null)
+      closeResultSet();
+      if (!_conn.isClosed())
       {
-        if (!conn.isClosed())
-        {
-          conn.commit();
-          conn.close();
-        }
+        _conn.commit();
+        _conn.close();
       }
     }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   } /* tearDown */
-
+  
+  
 	@Test
 	public void testClass()
 	{
@@ -141,8 +136,9 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester
   {
     try
     {
-      openResultSet(getResultSet().getStatement().getConnection(),_sNativeQuerySimple);
+      openResultSet(_sNativeQuerySimple);
       super.testAll();
+      System.out.println("Tested all!");
     }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   } /* testNativeSimple */
@@ -152,7 +148,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester
   {
     try
     {
-      openResultSet(getResultSet().getStatement().getConnection(),_sNativeQueryComplex);
+      openResultSet(_sNativeQueryComplex);
       super.testAll();
     }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
@@ -163,7 +159,7 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester
   {
     try
     {
-      openResultSet(getResultSet().getStatement().getConnection(),_sSqlQuerySimple);
+      openResultSet(_sSqlQuerySimple);
       super.testAll();
     }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
@@ -174,10 +170,12 @@ public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester
   {
     try
     {
-      openResultSet(getResultSet().getStatement().getConnection(),_sSqlQueryComplex);
+      openResultSet(_sSqlQueryComplex);
       super.testAll();
     }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   } /* testSqlComplex */
+  
+  
   
 }

@@ -14,7 +14,6 @@ import java.sql.*;
 import java.util.concurrent.*;
 import ch.enterag.utils.jdbc.*;
 import ch.enterag.utils.logging.*;
-import ch.enterag.utils.reflect.*;
 import ch.enterag.sqlparser.*;
 import ch.enterag.sqlparser.ddl.*;
 import ch.enterag.sqlparser.ddl.enums.*;
@@ -30,7 +29,6 @@ import ch.admin.bar.siard2.mysql.*;
 public class MySqlConnection extends BaseConnection implements Connection {
 	// logger
 	private static IndentLogger _il = IndentLogger.getIndentLogger(MySqlConnection.class.getName());
-	private com.mysql.jdbc.JDBC4Connection _connNative = null;
   private QualifiedId _qiTableDropCascade = null;
   public QualifiedId getTableDropCascade() { return _qiTableDropCascade; }
   public void resetTableDropCascade() { _qiTableDropCascade = null; }
@@ -39,21 +37,6 @@ public class MySqlConnection extends BaseConnection implements Connection {
 	public void resetTableWithoutPrimaryKey() { _qiTableWithoutPrimaryKey = null; }
 	public static final String _sSET_FOREIGN_KEYS = "SET FOREIGN_KEY_CHECKS = {0};";
 
-	public void setNoBackslashEscapes(boolean bNoBackslashEscapes)
-	  throws SQLException
-	{
-    String sSql = "ANSI";
-    if (bNoBackslashEscapes)
-      sSql = sSql + ",NO_BACKSLASH_ESCAPES";
-    sSql = "SET SESSION sql_mode = '"+sSql+"';";
-	  Statement stmt = super.createStatement();
-	  stmt.executeUpdate(sSql);
-	  stmt.close();
-    /* unfortunately this session setting is not caught in the Connection instance ... */
-    Glue.setPrivate(_connNative, "noBackslashEscapes", Boolean.valueOf(bNoBackslashEscapes));
-	  
-	} /* setNoBackSlashEscapes */
-	
 	/*------------------------------------------------------------------*/
 	/**
 	 * {@inheritDoc}
@@ -61,12 +44,9 @@ public class MySqlConnection extends BaseConnection implements Connection {
 	 * @param connWrapped Connection to be wrapped
 	 * @throws SQLException
 	 */
-	public MySqlConnection(com.mysql.jdbc.JDBC4Connection connNative) throws SQLException 
+	public MySqlConnection(Connection connNative) throws SQLException 
 	{
 		super(connNative);
-		_connNative = connNative;
-    setNoBackslashEscapes(true);
-    // System.out.println(connNative.isNoBackslashEscapesSet());
 	} /* constructor */
 	
 	/*------------------------------------------------------------------*/
@@ -161,7 +141,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
 	@Override
 	public Statement createStatement() throws SQLException 
 	{
-		return new MySqlStatement(super.createStatement(),this);
+    Statement stmt = super.createStatement();
+    return new MySqlStatement(stmt,this);
 	} /* createStatement */
 
 	/*------------------------------------------------------------------*/
@@ -171,7 +152,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
 	@Override
 	public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException 
 	{
-		return new MySqlStatement(super.createStatement(resultSetType, resultSetConcurrency),this);
+    Statement stmt = super.createStatement(resultSetType, resultSetConcurrency);
+    return new MySqlStatement(stmt,this);
 	} /* createStatement */
 	
   /*------------------------------------------------------------------*/
@@ -181,8 +163,8 @@ public class MySqlConnection extends BaseConnection implements Connection {
     int resultSetConcurrency, int resultSetHoldability)
     throws SQLException
   {
-    return new MySqlStatement(super.createStatement(resultSetType, resultSetConcurrency, 
-      resultSetHoldability),this);
+    Statement stmt = super.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
+    return new MySqlStatement(stmt,this);
   } /* createStatement */
 
   /*------------------------------------------------------------------*/
