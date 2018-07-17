@@ -30,6 +30,7 @@ public class MySqlBlobTester
   
   private static boolean isInitialized()
   {
+    System.out.println("Check BLOB initialization");
     boolean bInitialized = true;
     for (int iRecord = 0; _cp.getBlobPng(iRecord) != null; iRecord++)
       listPngs.add(_cp.getBlobPng(iRecord));
@@ -63,6 +64,7 @@ public class MySqlBlobTester
         long lFlacSize = rsSizes.getLong("CFLAC_SIZE");
         if (lFlacSize != fileFlac.length())
           bInitialized = false;
+        System.out.println("  Record: "+String.valueOf(iRecord)+": PNG "+String.valueOf(lPngSize)+", FLAC "+String.valueOf(lFlacSize));
       }
       if (iRecords != listPngs.size())
         bInitialized = false;
@@ -72,6 +74,7 @@ public class MySqlBlobTester
       connMySql.close();
     }
     catch(SQLException se) { bInitialized = false; }
+    System.out.println("Initialized:"+String.valueOf(bInitialized));
     return bInitialized;
   }
   
@@ -128,8 +131,10 @@ public class MySqlBlobTester
   } /* tearDown */
   
   @Test
-  public void test() 
+  public void testSizes() 
   {
+    System.out.println();
+    System.out.println("testSizes");
     try
     {
       /* query rows and LOB sizes */
@@ -145,19 +150,61 @@ public class MySqlBlobTester
       if (rsSizes.next())
       {
         long lRows = rsSizes.getLong("RECORDS");
-        System.out.println("Rows: "+String.valueOf(lRows));
+        System.out.println("  Rows: "+String.valueOf(lRows));
         for (int iLob = 0; iLob < 2; iLob++)
         {
           String sLobName = rsmd.getColumnLabel(iLob+2);
-          System.out.println("LOB name: "+sLobName);
           long lLobSize = rsSizes.getLong(sLobName);
-          System.out.println("LOB size: "+String.valueOf(lLobSize));
+          System.out.println("  "+sLobName+": "+String.valueOf(lLobSize));
         }
       }
       else
         throw new IOException("Sizes of table "+qiTable.format()+" could not be determined!");
       rsSizes.close();
       stmtSizes.close();
+    }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+    catch(IOException ie) { fail(EU.getExceptionMessage(ie)); }
+  }
+
+  @Test
+  public void testDownload() 
+  {
+    System.out.println();
+    System.out.println("testDownload");
+    try
+    {
+      /* download table */
+      String sQuery = "SELECT CINT";
+      sQuery = sQuery + ",\r\n CPNG";
+      sQuery = sQuery + ",\r\n CFLAC";
+      QualifiedId qiTable = TestBlobDatabase.getQualifiedSimpleTable();
+      sQuery = sQuery + "\r\nFROM "+qiTable.format();
+      Statement stmt = _connMySql.createStatement();
+      stmt.setQueryTimeout(300);
+      ResultSet rs = stmt.executeQuery(sQuery);
+      while (rs.next())
+      {
+        int iRecord = rs.getInt("CINT");
+        
+        byte[] buf = new byte[8192];
+        
+        InputStream is = rs.getBinaryStream("CPNG");
+        long lPngSize = 0;
+        for (int iRead = is.read(buf); iRead != -1; iRead = is.read(buf))
+          lPngSize += iRead;
+        is.close();
+        
+        is = rs.getBinaryStream("CFLAC");
+        long lFlacSize = 0;
+        for (int iRead = is.read(buf); iRead != -1; iRead = is.read(buf))
+          lFlacSize += iRead;
+        is.close();
+        System.out.println("  Record: "+String.valueOf(iRecord)+": PNG "+String.valueOf(lPngSize)+", FLAC "+String.valueOf(lFlacSize));
+        
+      }
+      rs.close();
+      stmt.close();
     }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
     catch(IOException ie) { fail(EU.getExceptionMessage(ie)); }
