@@ -66,14 +66,14 @@ public class MySqlMetaColumns extends MySqlResultSet
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.VARBINARY, PreType.VARBINARY);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.VARCHAR, PreType.VARCHAR);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.YEAR, PreType.SMALLINT);
-		mapNAME_MYSQL_TO_ISO.put(MySqlType.GEOMETRY, PreType.VARCHAR);
+		mapNAME_MYSQL_TO_ISO.put(MySqlType.GEOMETRY, PreType.CLOB);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.POINT, PreType.VARCHAR);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.LINESTRING, PreType.VARCHAR);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.POLYGON, PreType.VARCHAR);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.MULTIPOINT, PreType.VARCHAR);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.MULTILINESTRING, PreType.VARCHAR);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.MULTIPOLYGON, PreType.VARCHAR);
-		mapNAME_MYSQL_TO_ISO.put(MySqlType.GEOMETRYCOLLECTION, PreType.VARCHAR);
+		mapNAME_MYSQL_TO_ISO.put(MySqlType.GEOMETRYCOLLECTION, PreType.CLOB);
 	}
 
 	private static final int iMAX_VARCHAR_LENGTH = 21845; 
