@@ -28,10 +28,9 @@ public class MySqlBlobTester
   
   private MySqlConnection _connMySql = null;
   
-  private static boolean isInitialized()
+  @BeforeClass 
+  public static void setUpClass()
   {
-    System.out.println("Check BLOB initialization");
-    boolean bInitialized = true;
     for (int iRecord = 0; _cp.getBlobPng(iRecord) != null; iRecord++)
       listPngs.add(_cp.getBlobPng(iRecord));
     for (int iRecord = 0; _cp.getBlobFlac(iRecord) != null; iRecord++)
@@ -40,64 +39,16 @@ public class MySqlBlobTester
     {
       MySqlDataSource dsMySql = new MySqlDataSource();
       dsMySql.setUrl(_sDB_URL);
-      dsMySql.setUser(_sDB_USER);
-      dsMySql.setPassword(_sDB_PASSWORD);
+      dsMySql.setUser(_sDBA_USER);
+      dsMySql.setPassword(_sDBA_PASSWORD);
       MySqlConnection connMySql = (MySqlConnection) dsMySql.getConnection();
-      connMySql.setAutoCommit(false);
-      String sQuery = "SELECT CINT AS CINT";
-      sQuery = sQuery + ",\r\n OCTET_LENGTH(CPNG) AS CPNG_SIZE";
-      sQuery = sQuery + ",\r\n OCTET_LENGTH(CFLAC) AS CFLAC_SIZE";
-      QualifiedId qiTable = TestBlobDatabase.getQualifiedSimpleTable();
-      sQuery = sQuery + "\r\nFROM "+qiTable.format();
-      Statement stmtSizes = connMySql.createStatement();
-      stmtSizes.setQueryTimeout(300);
-      ResultSet rsSizes = stmtSizes.executeQuery(sQuery);
-      int iRecords = 0;
-      for (; rsSizes.next();iRecords++) 
-      {
-        int iRecord = rsSizes.getInt("CINT");
-        File filePng = new File(listPngs.get(iRecord));
-        File fileFlac = new File(listFlacs.get(iRecord));
-        long lPngSize = rsSizes.getLong("CPNG_SIZE");
-        if (lPngSize != filePng.length())
-          bInitialized = false;
-        long lFlacSize = rsSizes.getLong("CFLAC_SIZE");
-        if (lFlacSize != fileFlac.length())
-          bInitialized = false;
-        System.out.println("  Record: "+String.valueOf(iRecord)+": PNG "+String.valueOf(lPngSize)+", FLAC "+String.valueOf(lFlacSize));
-      }
-      if (iRecords != listPngs.size())
-        bInitialized = false;
-      if (iRecords != listFlacs.size())
-        bInitialized = false;
-      connMySql.commit();
+      new TestBlobDatabase(connMySql,listPngs,listFlacs);
+      TestMySqlDatabase.grantSchemaUser(connMySql, 
+        TestBlobDatabase._sTEST_SCHEMA, _sDB_USER);
       connMySql.close();
     }
-    catch(SQLException se) { bInitialized = false; }
-    System.out.println("Initialized:"+String.valueOf(bInitialized));
-    return bInitialized;
-  }
-  
-  @BeforeClass 
-  public static void setUpClass()
-  {
-    if (!isInitialized())
-    {
-      try
-      {
-        MySqlDataSource dsMySql = new MySqlDataSource();
-        dsMySql.setUrl(_sDB_URL);
-        dsMySql.setUser(_sDBA_USER);
-        dsMySql.setPassword(_sDBA_PASSWORD);
-        MySqlConnection connMySql = (MySqlConnection) dsMySql.getConnection();
-        new TestBlobDatabase(connMySql,listPngs,listFlacs);
-        TestMySqlDatabase.grantSchemaUser(connMySql, 
-          TestBlobDatabase._sTEST_SCHEMA, _sDB_USER);
-        connMySql.close();
-      }
-      catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
-      catch(IOException ie) { fail(EU.getExceptionMessage(ie)); }
-    }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+    catch(IOException ie) { fail(EU.getExceptionMessage(ie)); }
   } /* setUpClass */
 
   

@@ -35,19 +35,62 @@ public class TestBlobDatabase
   }
   public static List<TestColumnDefinition> _listCdSimple = getCdSimple();
   
+  private boolean isInitialized(MySqlConnection connMySql, List<String> listPngs, List<String>listFlacs)
+  {
+    System.out.println("Check BLOB initialization");
+    boolean bInitialized = true;
+    try
+    {
+      String sQuery = "SELECT CINT AS CINT";
+      sQuery = sQuery + ",\r\n OCTET_LENGTH(CPNG) AS CPNG_SIZE";
+      sQuery = sQuery + ",\r\n OCTET_LENGTH(CFLAC) AS CFLAC_SIZE";
+      QualifiedId qiTable = TestBlobDatabase.getQualifiedSimpleTable();
+      sQuery = sQuery + "\r\nFROM "+qiTable.format();
+      Statement stmtSizes = connMySql.createStatement();
+      stmtSizes.setQueryTimeout(300);
+      ResultSet rsSizes = stmtSizes.executeQuery(sQuery);
+      int iRecords = 0;
+      for (; rsSizes.next();iRecords++) 
+      {
+        int iRecord = rsSizes.getInt("CINT");
+        File filePng = new File(listPngs.get(iRecord));
+        File fileFlac = new File(listFlacs.get(iRecord));
+        long lPngSize = rsSizes.getLong("CPNG_SIZE");
+        if (lPngSize != filePng.length())
+          bInitialized = false;
+        long lFlacSize = rsSizes.getLong("CFLAC_SIZE");
+        if (lFlacSize != fileFlac.length())
+          bInitialized = false;
+        System.out.println("  Record: "+String.valueOf(iRecord)+": PNG "+String.valueOf(lPngSize)+", FLAC "+String.valueOf(lFlacSize));
+      }
+      if (iRecords != listPngs.size())
+        bInitialized = false;
+      if (iRecords != listFlacs.size())
+        bInitialized = false;
+      connMySql.commit();
+      connMySql.close();
+    }
+    catch(SQLException se) { bInitialized = false; }
+    System.out.println("Initialized:"+String.valueOf(bInitialized));
+    return bInitialized;
+  }
+  
 	private Connection _conn;
 	private List<String> _listPngs = null;
 	private List<String> _listFlacs = null;
 
-	public TestBlobDatabase(MySqlConnection connMySql,List<String> listPngs, List<String> listFlacs)
+	public TestBlobDatabase(MySqlConnection connMySql, List<String> listPngs, List<String> listFlacs)
 	  throws SQLException, IOException
 	{
-	  _listPngs = listPngs;
-	  _listFlacs = listFlacs;
-		_conn = connMySql.unwrap(Connection.class);
-		_conn.setAutoCommit(false);
-		drop();
-		create();
+	  if (!isInitialized(connMySql,listPngs,listFlacs))
+	  {
+  	  _listPngs = listPngs;
+  	  _listFlacs = listFlacs;
+  		_conn = connMySql.unwrap(Connection.class);
+  		_conn.setAutoCommit(false);
+  		drop();
+  		create();
+	  }
 	} /* constructor */
 
   private void drop()
