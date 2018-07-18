@@ -174,14 +174,14 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
             case "timestamp": assertEquals("Invalid timestamp mapping!",Types.TIMESTAMP,iDataType); break;
             case "datetime": assertEquals("Invalid datetime mapping!",Types.TIMESTAMP,iDataType); break;
             case "year": assertEquals("Invalid year mapping!",Types.SMALLINT,iDataType); break;
-            case "geometry": assertEquals("Invalid geometry mapping!",Types.VARCHAR,iDataType); break;
-            case "point": assertEquals("Invalid point mapping!",Types.VARCHAR,iDataType); break;
-            case "linestring": assertEquals("Invalid linestring mapping!",Types.VARCHAR,iDataType); break;
-            case "polygon": assertEquals("Invalid polygon mapping!",Types.VARCHAR,iDataType); break;
-            case "multipoint": assertEquals("Invalid multipoint mapping!",Types.VARCHAR,iDataType); break;
-            case "multilinestring": assertEquals("Invalid multilinestring mapping!",Types.VARCHAR,iDataType); break;
-            case "multipolygon": assertEquals("Invalid multipolygon mapping!",Types.VARCHAR,iDataType); break;
-            case "geometrycollection": assertEquals("Invalid geometrycollection mapping!",Types.VARCHAR,iDataType); break;
+            case "geometry": assertEquals("Invalid geometry mapping!",Types.CLOB,iDataType); break;
+            case "point": assertEquals("Invalid point mapping!",Types.CLOB,iDataType); break;
+            case "linestring": assertEquals("Invalid linestring mapping!",Types.CLOB,iDataType); break;
+            case "polygon": assertEquals("Invalid polygon mapping!",Types.CLOB,iDataType); break;
+            case "multipoint": assertEquals("Invalid multipoint mapping!",Types.CLOB,iDataType); break;
+            case "multilinestring": assertEquals("Invalid multilinestring mapping!",Types.CLOB,iDataType); break;
+            case "multipolygon": assertEquals("Invalid multipolygon mapping!",Types.CLOB,iDataType); break;
+            case "geometrycollection": assertEquals("Invalid geometrycollection mapping!",Types.CLOB,iDataType); break;
             case "enum": assertEquals("Invalid enum mapping!",Types.VARCHAR,iDataType); break;
             case "set": assertEquals("Invalid set mapping!",Types.VARCHAR,iDataType); break;
             default:

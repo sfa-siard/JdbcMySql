@@ -67,12 +67,12 @@ public class MySqlMetaColumns extends MySqlResultSet
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.VARCHAR, PreType.VARCHAR);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.YEAR, PreType.SMALLINT);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.GEOMETRY, PreType.CLOB);
-		mapNAME_MYSQL_TO_ISO.put(MySqlType.POINT, PreType.VARCHAR);
-		mapNAME_MYSQL_TO_ISO.put(MySqlType.LINESTRING, PreType.VARCHAR);
-		mapNAME_MYSQL_TO_ISO.put(MySqlType.POLYGON, PreType.VARCHAR);
-		mapNAME_MYSQL_TO_ISO.put(MySqlType.MULTIPOINT, PreType.VARCHAR);
-		mapNAME_MYSQL_TO_ISO.put(MySqlType.MULTILINESTRING, PreType.VARCHAR);
-		mapNAME_MYSQL_TO_ISO.put(MySqlType.MULTIPOLYGON, PreType.VARCHAR);
+		mapNAME_MYSQL_TO_ISO.put(MySqlType.POINT, PreType.CLOB);
+		mapNAME_MYSQL_TO_ISO.put(MySqlType.LINESTRING, PreType.CLOB);
+		mapNAME_MYSQL_TO_ISO.put(MySqlType.POLYGON, PreType.CLOB);
+		mapNAME_MYSQL_TO_ISO.put(MySqlType.MULTIPOINT, PreType.CLOB);
+		mapNAME_MYSQL_TO_ISO.put(MySqlType.MULTILINESTRING, PreType.CLOB);
+		mapNAME_MYSQL_TO_ISO.put(MySqlType.MULTIPOLYGON, PreType.CLOB);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.GEOMETRYCOLLECTION, PreType.CLOB);
 	}
 
