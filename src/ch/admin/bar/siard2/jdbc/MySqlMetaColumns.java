@@ -76,6 +76,7 @@ public class MySqlMetaColumns extends MySqlResultSet
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.GEOMETRYCOLLECTION, PreType.VARCHAR);
 	}
 
+	private static final int iMAX_VARCHAR_LENGTH = 21845; 
 	private int _iDataType = -1;
 	private int _iTypeName = -1;
 	private int _iPrecision = -1;
@@ -124,7 +125,7 @@ public class MySqlMetaColumns extends MySqlResultSet
 			if ((iDataType == Types.VARCHAR) ||
 					(iDataType == Types.NVARCHAR) ||
 					(iDataType == Types.VARBINARY))
-				lColumnSize = Short.MAX_VALUE;
+				lColumnSize = iMAX_VARCHAR_LENGTH;
 		}
 		return lColumnSize;
 	} /* getColumnSize */
