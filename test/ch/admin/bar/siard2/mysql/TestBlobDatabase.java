@@ -67,8 +67,6 @@ public class TestBlobDatabase
         bInitialized = false;
       if (iRecords != listFlacs.size())
         bInitialized = false;
-      connMySql.commit();
-      connMySql.close();
     }
     catch(SQLException se) { bInitialized = false; }
     System.out.println("Initialized:"+String.valueOf(bInitialized));
