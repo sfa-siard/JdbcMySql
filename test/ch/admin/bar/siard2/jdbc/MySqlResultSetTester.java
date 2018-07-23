@@ -148,18 +148,15 @@ public class MySqlResultSetTester extends BaseResultSetTester
     return _conn;
   } /* closeResultSet */
   
-  private void openResultSet(String sQuery, boolean bUpdatable)
+  private void openResultSet(String sQuery, int iType, int iConcurrency)
     throws SQLException
   {
     closeResultSet();
-    int iType = ResultSet.TYPE_FORWARD_ONLY; // no other type is supported by MySQL!
-    int iConcurrency = ResultSet.CONCUR_READ_ONLY;
-    if (bUpdatable)
-      iConcurrency = ResultSet.CONCUR_UPDATABLE;
     Statement stmt = _conn.createStatement(iType,iConcurrency);
     long lMsExecuteStart = System.currentTimeMillis();
     ResultSet rs = stmt.executeQuery(sQuery);
-    assertEquals("Invalid result set type!",iType,rs.getType());
+    // it is always TYPE_FORWARD_ONLY
+    // assertEquals("Invalid result set type!",iType,rs.getType());
     assertEquals("Invalid result set concurrency!",iConcurrency,rs.getConcurrency());
     // assertEquals("Invalid result set holdability",ResultSet.CLOSE_CURSORS_AT_COMMIT,rs.getHoldability());
     _lMsExecute = _lMsExecute + System.currentTimeMillis() - lMsExecuteStart; 
@@ -179,7 +176,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
       _conn = dsMySql.getConnection();
       _lMsConnect = _lMsConnect + System.currentTimeMillis() - lMsConnectStart;
       _conn.setAutoCommit(false);
-      openResultSet(_sSqlQuerySimple,false);
+      //openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
     }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
 	}
@@ -216,8 +213,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
 	{
 	  try
 	  {
-      openResultSet(_sSqlQuerySimple,false);
-  	  assertEquals("Wrong result set class!", MySqlResultSet.class, getResultSet().getClass());
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+  	    assertEquals("Wrong result set class!", MySqlResultSet.class, getResultSet().getClass());
 	  }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
 	}
@@ -229,7 +226,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
     enter();
     try 
     { 
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       getResultSet().findColumn("CCHAR_5");
     }
     catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
@@ -243,7 +240,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
     enter();
     try 
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       getResultSet().getObject(1);
       getResultSet().wasNull();
     }
@@ -257,7 +254,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CVARCHAR_255");
       String s = getResultSet().getString(tcd.getName());
@@ -272,7 +269,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CNVARCHAR_127");
       String s = getResultSet().getNString(tcd.getName());
@@ -287,7 +284,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CCLOB_2M");
       Clob clob = getResultSet().getClob(tcd.getName());
@@ -303,7 +300,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CNCLOB_1M");
       NClob nclob = getResultSet().getNClob(tcd.getName());
@@ -319,7 +316,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CXML");
       SQLXML sqlxml = getResultSet().getSQLXML(tcd.getName());
@@ -335,7 +332,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CVARBINARY_255");
       byte[] buf = getResultSet().getBytes(tcd.getName());
@@ -350,7 +347,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CBLOB");
       Blob blob = getResultSet().getBlob(tcd.getName());
@@ -366,7 +363,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CDECIMAL_15_5");
       BigDecimal bd = getResultSet().getBigDecimal(tcd.getName());
@@ -382,7 +379,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CDECIMAL_15_5");
       BigDecimal bd = getResultSet().getBigDecimal(tcd.getName(),3);
@@ -397,7 +394,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CBOOLEAN");
       byte by = getResultSet().getByte(tcd.getName());
@@ -412,7 +409,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CSMALLINT");
       short sh = getResultSet().getShort(tcd.getName());
@@ -427,7 +424,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CINTEGER");
       int i = getResultSet().getInt(tcd.getName());
@@ -442,7 +439,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CBIGINT");
       long l = getResultSet().getLong(tcd.getName());
@@ -457,7 +454,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CREAL");
       float f = getResultSet().getFloat(tcd.getName());
@@ -472,7 +469,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CDOUBLE");
       double d = getResultSet().getDouble(tcd.getName());
@@ -487,7 +484,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CBOOLEAN");
       boolean b = getResultSet().getBoolean(tcd.getName());
@@ -502,7 +499,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CDATE");
       Date date = getResultSet().getDate(tcd.getName());
@@ -517,7 +514,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CDATE");
       Calendar cal = new GregorianCalendar();
@@ -533,7 +530,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CTIME");
       Time time = getResultSet().getTime(tcd.getName());
@@ -548,7 +545,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CTIME");
       Calendar cal = new GregorianCalendar();
@@ -564,7 +561,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CTIMESTAMP");
       Object o = getResultSet().getObject(tcd.getName());
@@ -584,7 +581,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CTIMESTAMP");
       Calendar cal = new GregorianCalendar();
@@ -603,7 +600,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
     enter();
     try 
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CINTERVAL_YEAR_3_MONTH");
       Duration duration = getBaseResultSet().getDuration(tcd.getName());
@@ -619,7 +616,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CVARCHAR_255");
       InputStream is = getResultSet().getAsciiStream(tcd.getName());
@@ -642,7 +639,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CNVARCHAR_127");
       Reader rdr = new InputStreamReader(getResultSet().getUnicodeStream(tcd.getName()),SU.sUTF8_CHARSET_NAME);
@@ -665,7 +662,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CVARCHAR_255");
       Reader rdr = getResultSet().getCharacterStream(tcd.getName());
@@ -687,7 +684,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CNVARCHAR_127");
       Reader rdr = getResultSet().getNCharacterStream(tcd.getName());
@@ -709,7 +706,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CVARBINARY_255");
       InputStream is = getResultSet().getBinaryStream(tcd.getName());
@@ -755,7 +752,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CINTERVAL_YEAR_3_MONTH");
       Object o = getResultSet().getObject(tcd.getName());
@@ -772,7 +769,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
     enter();
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdSimple,"CDATE");
       Date date = getResultSet().getObject(tcd.getName(),Date.class);
@@ -787,7 +784,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQueryComplex,false);
+      openResultSet(_sSqlQueryComplex,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       TestColumnDefinition tcd = findColumnDefinition(
         TestSqlDatabase._listCdComplex,"CID");
       Map<String,Class<?>> map = new HashMap<String,Class<?>>();
@@ -804,7 +801,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       for (int iColumn = 0; iColumn < TestSqlDatabase._listCdSimple.size(); iColumn++)
       {
         TestColumnDefinition tcd = TestSqlDatabase._listCdSimple.get(iColumn);
@@ -1013,7 +1010,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sNativeQuerySimple,false);
+      openResultSet(_sNativeQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       for (int iColumn = 0; iColumn < TestMySqlDatabase._listCdSimple.size(); iColumn++)
       {
         TestColumnDefinition tcd = TestMySqlDatabase._listCdSimple.get(iColumn);
@@ -1209,7 +1206,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQueryComplex,false);
+      openResultSet(_sSqlQueryComplex,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       for (int iColumn = 0; iColumn < TestSqlDatabase._listCdComplex.size(); iColumn++)
       {
         TestColumnDefinition tcd = TestSqlDatabase._listCdComplex.get(iColumn);
@@ -1256,7 +1253,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sNativeQueryComplex,false);
+      openResultSet(_sNativeQueryComplex,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       for (int iColumn = 0; iColumn < TestMySqlDatabase._listCdComplex.size(); iColumn++)
       {
         TestColumnDefinition tcd = TestMySqlDatabase._listCdComplex.get(iColumn);
@@ -1326,7 +1323,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
     enter();
     try 
     { 
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
       getResultSet().updateNull("CCHAR_5");
     }
     catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
@@ -1339,7 +1336,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CVARCHAR_255");
       getResultSet().updateString(tcd.getName(),(String)tcd.getValue());
@@ -1353,7 +1350,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CNVARCHAR_127");
       getResultSet().updateNString(tcd.getName(),(String)tcd.getValue());
@@ -1367,7 +1365,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CCLOB_2M");
       Clob clob = getResultSet().getStatement().getConnection().createClob();
@@ -1383,7 +1382,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CCLOB_2M");
       Reader rdr = new StringReader((String)tcd.getValue());
@@ -1398,7 +1398,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CCLOB_2M");
       Reader rdr = new StringReader((String)tcd.getValue());
@@ -1413,7 +1414,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CNCLOB_1M");
       NClob nclob = getResultSet().getStatement().getConnection().createNClob();
@@ -1429,7 +1431,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CNCLOB_1M");
       Reader rdr = new StringReader((String)tcd.getValue());
@@ -1444,7 +1447,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CNCLOB_1M");
       Reader rdr = new StringReader((String)tcd.getValue());
@@ -1460,7 +1464,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CXML");
       SQLXML sqlxml = getResultSet().getStatement().getConnection().createSQLXML();
@@ -1476,7 +1481,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CVARBINARY_255");
       getResultSet().updateBytes(tcd.getName(),(byte[])tcd.getValue());
@@ -1490,7 +1496,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CBLOB");
       Blob blob = getResultSet().getStatement().getConnection().createBlob();
@@ -1506,7 +1513,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CBLOB");
       InputStream is = new ByteArrayInputStream((byte[])tcd.getValue());
@@ -1521,7 +1529,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CBLOB");
       InputStream is = new ByteArrayInputStream((byte[])tcd.getValue());
@@ -1536,7 +1545,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CDECIMAL_15_5");
       getResultSet().updateBigDecimal(tcd.getName(),(BigDecimal)tcd.getValue());
@@ -1550,7 +1560,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CBOOLEAN");
       getResultSet().updateByte(tcd.getName(),((Boolean)tcd.getValue()).booleanValue()?(byte)1:(byte)0);
@@ -1564,7 +1575,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CSMALLINT");
       getResultSet().updateShort(tcd.getName(),((Short)tcd.getValue()).shortValue());
@@ -1578,7 +1590,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CINTEGER");
       getResultSet().updateInt(tcd.getName(),((Integer)tcd.getValue()).intValue());
@@ -1592,7 +1605,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(_listCdSimple,"CBIGINT");
       getResultSet().updateLong(tcd.getName(),((Long)tcd.getValue()).longValue());
     }
@@ -1605,7 +1619,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CREAL");
       getResultSet().updateFloat(tcd.getName(),((Float)tcd.getValue()).floatValue());
@@ -1619,7 +1634,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CDOUBLE");
       getResultSet().updateDouble(tcd.getName(),((Double)tcd.getValue()).doubleValue());
@@ -1633,7 +1649,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CBOOLEAN");
       getResultSet().updateBoolean(tcd.getName(),((Boolean)tcd.getValue()).booleanValue());
@@ -1647,7 +1664,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CDATE");
       getResultSet().updateDate(tcd.getName(),(Date)tcd.getValue());
@@ -1661,7 +1679,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CTIME");
       getResultSet().updateTime(tcd.getName(),(Time)tcd.getValue());
@@ -1675,7 +1694,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CTIMESTAMP");
       getResultSet().updateTimestamp(tcd.getName(),(Timestamp)tcd.getValue());
@@ -1688,7 +1708,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try 
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CINTERVAL_DAY_2_SECONDS_6");
       getBaseResultSet().updateDuration(tcd.getName(), ((Interval)tcd.getValue()).toDuration());
@@ -1703,7 +1724,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CVARCHAR_255");
       InputStream is = new ByteArrayInputStream(((String)tcd.getValue()).getBytes());
@@ -1719,7 +1741,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CVARCHAR_255");
       InputStream is = new ByteArrayInputStream(((String)tcd.getValue()).getBytes());
@@ -1734,7 +1757,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CVARCHAR_255");
       InputStream is = new ByteArrayInputStream(((String)tcd.getValue()).getBytes());
@@ -1750,7 +1774,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CVARCHAR_255");
       Reader rdr = new StringReader((String)tcd.getValue());
@@ -1765,7 +1790,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CVARCHAR_255");
       Reader rdr = new StringReader((String)tcd.getValue());
@@ -1780,7 +1806,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CVARCHAR_255");
       Reader rdr = new StringReader((String)tcd.getValue());
@@ -1795,7 +1822,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CNVARCHAR_127");
       Reader rdr = new StringReader((String)tcd.getValue());
@@ -1810,7 +1838,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CNVARCHAR_127");
       Reader rdr = new StringReader((String)tcd.getValue());
@@ -1825,7 +1854,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CNVARCHAR_127");
       Reader rdr = new StringReader((String)tcd.getValue());
@@ -1840,7 +1870,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CVARBINARY_255");
       InputStream is = new ByteArrayInputStream((byte[])tcd.getValue());
@@ -1855,7 +1886,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CVARBINARY_255");
       InputStream is = new ByteArrayInputStream((byte[])tcd.getValue());
@@ -1870,7 +1902,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CVARBINARY_255");
       InputStream is = new ByteArrayInputStream((byte[])tcd.getValue());
@@ -1905,7 +1938,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CDATE");
       getResultSet().updateObject(tcd.getName(),tcd.getValue());
@@ -1919,7 +1953,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CDECIMAL_15_5");
       getResultSet().updateObject(tcd.getName(),tcd.getValue(),3);
@@ -1934,7 +1969,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
     enter();
     try 
     { 
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       getResultSet().refreshRow(); 
     }
     catch(SQLException se) { System.out.println(EU.getExceptionMessage(se)); }
@@ -1947,9 +1982,9 @@ public class MySqlResultSetTester extends BaseResultSetTester
     try 
     {
       // cannot delete row in simple table because of foreign key
-      openResultSet(_sSqlQueryComplex,true);
+      openResultSet(_sSqlQueryComplex,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
       // cannot delete row in complex table because of a bug in JDBC driver
-      // probably the result set is in an ArrayList whish is based on an array
+      // probably the result set is in an ArrayList which is based on an array
       // and therefore cannot be removed.
       getResultSet().deleteRow();
       // restore the database
@@ -1959,6 +1994,21 @@ public class MySqlResultSetTester extends BaseResultSetTester
     }
     catch(Exception e) { System.out.println(EU.getExceptionMessage(e)); }
   } /* testDeleteRow */
+
+  @Override
+  @Test
+  public void testRowDeleted()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQueryComplex,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+    	  getResultSet().rowDeleted();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testRowDeleted */
+
   
   @Override
   @Test
@@ -1966,7 +2016,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try 
     { 
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CXML");
       SQLXML sqlxml = getResultSet().getStatement().getConnection().createSQLXML();
@@ -1984,11 +2034,25 @@ public class MySqlResultSetTester extends BaseResultSetTester
 
   @Override
   @Test
+  public void testRowUpdated()
+  {
+    enter();
+    try
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+      getResultSet().rowUpdated(); 
+    }
+    catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testRowUpdated */
+  
+  @Override
+  @Test
   public void testInsertRow() throws SQLException
   {
     try 
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
       getResultSet().moveToInsertRow();
       TestColumnDefinition tcd = findColumnDefinition(
         _listCdSimple,"CINTEGER");
@@ -2001,13 +2065,29 @@ public class MySqlResultSetTester extends BaseResultSetTester
     }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   } /* testInsertRow */
+
+  @Override
+  @Test
+  public void testRowInserted()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+    	  getResultSet().rowInserted();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testRowInserted */
+  
   
   @Test
   public void testInsertRowSimple() throws SQLException
   {
     try 
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       getResultSet().moveToInsertRow();
       TestColumnDefinition tcd = findColumnDefinition(_listCdSimple,"CCHAR_5");
       getResultSet().updateString(tcd.getName(),(String)tcd.getValue());
@@ -2068,7 +2148,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
       getResultSet().insertRow();
       getResultSet().moveToCurrentRow();
       
-      openResultSet(_sSqlQuerySimple,false);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       tcd = findColumnDefinition(
         _listCdSimple,"CINTEGER");
       while ((getResultSet().getInt(tcd.getName()) != ((Integer)tcd.getValue()).intValue()) && 
@@ -2193,7 +2273,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
   {
     try 
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       // needed for foreign key constraint ...
       getResultSet().moveToInsertRow();
       TestColumnDefinition tcd = findColumnDefinition(
@@ -2202,7 +2283,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
       getResultSet().insertRow();
       getResultSet().moveToCurrentRow();
 
-      openResultSet(_sSqlQueryComplex,true);
+      openResultSet(_sSqlQueryComplex,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
       getResultSet().moveToInsertRow();
       tcd = findColumnDefinition(_listCdComplex,"CID");
       getResultSet().updateInt(tcd.getName(),(((Integer)tcd.getValue())).intValue());
@@ -2210,7 +2291,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
       getResultSet().insertRow();
       getResultSet().moveToCurrentRow();
       
-      openResultSet(_sSqlQueryComplex,false);
+      openResultSet(_sSqlQueryComplex,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
       tcd = findColumnDefinition(_listCdComplex,"CID");
       while ((getResultSet().getInt(tcd.getName()) != ((Integer)tcd.getValue()).intValue()) && 
         getResultSet().next()) {}
@@ -2234,7 +2315,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
     enter();
     try 
     { 
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       getResultSet().moveToInsertRow();
     }
     catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
@@ -2248,7 +2330,8 @@ public class MySqlResultSetTester extends BaseResultSetTester
     enter();
     try 
     {
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+
       getResultSet().moveToCurrentRow(); 
     }
     catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
@@ -2262,7 +2345,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
     enter();
     try 
     { 
-      openResultSet(_sSqlQuerySimple,true);
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
       getResultSet().cancelRowUpdates(); 
     }
     catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
@@ -2273,7 +2356,11 @@ public class MySqlResultSetTester extends BaseResultSetTester
   public void testAbsolute()
   {
     enter();
-    try { getResultSet().absolute(1); }
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+    	  getResultSet().absolute(1); 
+    	}
     catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
     catch(SQLException se) { System.out.println(EU.getExceptionMessage(se)); }
   } /* testAbsolute */
@@ -2283,7 +2370,11 @@ public class MySqlResultSetTester extends BaseResultSetTester
   public void testRelative()
   {
     enter();
-    try { getResultSet().relative(1); }
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+    	  getResultSet().relative(1);
+    	}
     catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
     catch(SQLException se) { System.out.println(EU.getExceptionMessage(se)); }
   } /* testRelative */
@@ -2293,7 +2384,11 @@ public class MySqlResultSetTester extends BaseResultSetTester
   public void testBeforeFirst()
   {
     enter();
-    try { getResultSet().beforeFirst(); }
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+    	  getResultSet().beforeFirst(); 
+    	}
     catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
     catch(SQLException se) { System.out.println(EU.getExceptionMessage(se)); }
   } /* testBeforeFirst */
@@ -2303,7 +2398,11 @@ public class MySqlResultSetTester extends BaseResultSetTester
   public void testAfterLast()
   {
     enter();
-    try { getResultSet().afterLast(); }
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+      	getResultSet().afterLast(); 
+    	}
     catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
     catch(SQLException se) { System.out.println(EU.getExceptionMessage(se)); }
   } /* testAfterLast */
@@ -2315,6 +2414,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
     enter();
     try 
     {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
       getResultSet().next();
       getResultSet().previous();
     }
@@ -2327,7 +2427,11 @@ public class MySqlResultSetTester extends BaseResultSetTester
   public void testFirst()
   {
     enter();
-    try { getResultSet().first(); }
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+      	getResultSet().first();
+    	}
     catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
     catch(SQLException se) { System.out.println(EU.getExceptionMessage(se)); }
   } /* testFirst */
@@ -2337,7 +2441,11 @@ public class MySqlResultSetTester extends BaseResultSetTester
   public void testLast()
   {
     enter();
-    try { getResultSet().last(); }
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+      	getResultSet().last();
+    	}
     catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
     catch(SQLException se) { System.out.println(EU.getExceptionMessage(se)); }
   } /* testLast */
@@ -2347,9 +2455,284 @@ public class MySqlResultSetTester extends BaseResultSetTester
   public void testNext()
   {
     enter();
-    try { getResultSet().next(); }
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+    	  getResultSet().next();
+    	}
     catch(SQLFeatureNotSupportedException sfnse) { System.out.println(EU.getExceptionMessage(sfnse)); }
-    catch(SQLException se) { System.out.println(EU.getExceptionMessage(se)); }
-  } /* testPrevious */
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testNext */
   
+  @Override
+  @Test
+  public void testGetStatement()
+  {
+    enter();
+    try
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+    	  getResultSet().getStatement();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testGetStatement */
+
+  @Override
+  @Test
+  public void testGetWarnings()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().getWarnings();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testGetWarnings */
+  
+  @Override
+  @Test
+  public void testClearWarnings()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().clearWarnings();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testClearWarnings */
+  
+  @Override
+  @Test
+  public void testGetCursorName()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().getCursorName(); 
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testGetCursorName */
+  
+  @Override
+  @Test
+  public void testClose()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      Statement stmt = getResultSet().getStatement();
+      getResultSet().close();
+      if (!stmt.isClosed())
+      	  stmt.close();
+      if (!_conn.isClosed())
+        _conn.rollback();
+    }
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testClose */
+  
+  @Test
+  public void testIsClosed()
+  {
+    enter();
+    try
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().isClosed();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testIsClosed */
+  
+
+  @Override
+  @Test
+  public void testGetHoldability()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().getHoldability();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testGetHoldability */
+  
+  @Override
+  @Test
+  public void testSetFetchDirection()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().setFetchDirection(ResultSet.FETCH_UNKNOWN);
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testSetFetchDirection */
+  
+  @Override
+  @Test
+  public void testGetFetchDirection()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().getFetchDirection();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testGetFetchDirection */
+  
+  @Override
+  @Test
+  public void testSetFetchSize()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().setFetchSize(20);
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testSetFetchSize */
+  
+  @Override
+  @Test
+  public void testGetFetchSize()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().getFetchSize();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testGetFetchSize */
+  
+  @Override
+  @Test
+  public void testGetType()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      assertEquals("Invalid result set type!",ResultSet.TYPE_FORWARD_ONLY,getResultSet().getType());
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testGetType */
+  
+  @Override
+  @Test
+  public void testGetConcurrency()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      assertEquals("Invalid result set concurrency!",ResultSet.CONCUR_READ_ONLY,getResultSet().getConcurrency());
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testGetConcurrency */
+  
+  @Override
+  @Test
+  public void testGetMetaData()
+  {
+    enter();
+    try
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().getMetaData(); 
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testGetMetaData */
+  
+  @Override
+  @Test
+  public void testGetRow()
+  {
+    enter();
+    try
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().getRow();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testGetRow */
+  
+  @Override
+  @Test
+  public void testIsBeforeFirst()
+  {
+    enter();
+    try
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().isBeforeFirst();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testIsBeforeFirst */
+  
+  @Override
+  @Test
+  public void testIsAfterLast()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().isAfterLast();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testIsAfterLast */
+  
+  @Override
+  @Test
+  public void testIsFirst()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().isFirst();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testIsFirst */
+  
+  @Override
+  @Test
+  public void testIsLast()
+  {
+    enter();
+    try 
+    {
+      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
+      getResultSet().isLast();
+    	}
+    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  } /* testIsLast */
+
 }
