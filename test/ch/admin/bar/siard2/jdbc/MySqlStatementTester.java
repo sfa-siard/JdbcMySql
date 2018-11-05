@@ -273,5 +273,22 @@ public class MySqlStatementTester extends BaseStatementTester
     catch(SQLTimeoutException ste) { fail(EU.getExceptionMessage(ste)); }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   }
+  
+  @Test
+  public void testCreateTableLarge()
+  {
+    enter();
+    try { _stmtMySql.executeUpdate("DROP TABLE BUG462 CASCADE"); }
+    catch(SQLException se) { System.out.println(EU.getExceptionMessage(se)); }
+    try
+    {
+      String sSql = "CREATE TABLE BUG462(\"JournaleintragRefId\" INTEGER,\r\n" + 
+        "\"Beschreibung\" NCHAR VARYING(2147483647),\r\n" + 
+        "\"Dateiname\" NCHAR VARYING(2147483647),\r\n" + 
+        "\"DokumentInhalt\" VARBINARY(8000))";
+      _stmtMySql.executeUpdate(sSql);
+    }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  }
 
 }
