@@ -98,13 +98,38 @@ public class MySqlPredefinedType extends PredefinedType
 				   getType() == PreType.INTEGER || 
 				   getType() == PreType.BIGINT) 
 			sType = sType + formatPrecisionScale(); // [(M)]
-		else if (getType() == PreType.CHAR || 
-				   getType() == PreType.VARCHAR || 
-				   getType() == PreType.NCHAR ||
-				   getType() == PreType.NVARCHAR ||
-				   getType() == PreType.BINARY || 
-				   getType() == PreType.VARBINARY)
-			sType = sType + formatLength(); // (M)
+    else if (getType() == PreType.CHAR || 
+      getType() == PreType.VARCHAR || 
+      getType() == PreType.NCHAR ||
+      getType() == PreType.NVARCHAR)
+    {
+      sType = sType + formatLength(); // (M)
+      long l = getLength();
+      if (l != (long)iUNDEFINED)
+      {
+        if (l >= 16777216)
+          sType = "LONGTEXT";
+        else if (l >= 65536)
+          sType = "MEDIUMTEXT";
+        else if (l >= 256)
+          sType = "TEXT";
+      }
+    }
+    else if (getType() == PreType.BINARY || 
+      getType() == PreType.VARBINARY)
+    {
+      sType = sType + formatLength(); // (M)
+      long l = getLength();
+      if (getLength() != (long)iUNDEFINED)
+      {
+        if (l >= 16777216)
+          sType = "LONGBLOB";
+        else if (l >= 65536)
+          sType = "MEDIUMBLOB";
+        else if (l >= 256)
+          sType = "BLOB";
+      }
+    }
 		else if (getType() == PreType.TIME ||
 				   getType() == PreType.TIMESTAMP ||
 				   getType() == PreType.DATE) 
@@ -114,9 +139,9 @@ public class MySqlPredefinedType extends PredefinedType
 		else if ((getType() == PreType.CLOB) ||
 		         (getType() == PreType.NCLOB))
 		{
-		  if (getLength() != iUNDEFINED)
+      long l = getLength();
+		  if (getLength() != (long)iUNDEFINED)
 		  {
-		    long l = getLength();
 		    if (getMultiplier() != null)
 		      l = l * getMultiplier().getValue();
 		    if (l < 65536)
