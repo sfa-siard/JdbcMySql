@@ -1,6 +1,9 @@
 Release Notes for JdbcMySql 2.1
 ===============================
 
+2.1.32
+Bugfixes (upload large VARCHAR columns)
+
 2.1.0
 Release for JAVA 10
 
