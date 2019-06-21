@@ -886,28 +886,31 @@ public class MySqlDatabaseMetaData
 
 		// get the table from the INFORMATION SCHEMA
 		sb.append("SELECT\r\n" +
-				"NULL AS TABLE_CAT,\r\n" +
-				"TABLE_SCHEMA as TABLE_SCHEM,\r\n" +
-				"TABLE_NAME,\r\n" +
-				"CASE TABLE_TYPE\r\n" +
-				"    WHEN 'BASE TABLE' THEN 'TABLE'\r\n" +
-				"    ELSE TABLE_TYPE\r\n" +
-				"END AS TABLE_TYPE,\r\n" +
-				"TABLE_COMMENT AS REMARKS,\r\n" +
-				"NULL AS TYPE_CAT,\r\n" +
-				"NULL AS TYPE_SCHEM,\r\n" +
-				"NULL AS TYPE_NAME,\r\n" +
-				"NULL AS SELF_REFERENCING_COL_NAME,\r\n" +
-				"NULL AS REF_GENERATION\r\n" +
-				"FROM information_schema.TABLES\r\n");
+				"  NULL AS TABLE_CAT,\r\n" +
+				"  t.TABLE_SCHEMA as TABLE_SCHEM,\r\n" +
+				"  t.TABLE_NAME,\r\n" +
+				"  CASE t.TABLE_TYPE\r\n" +
+				"      WHEN 'BASE TABLE' THEN 'TABLE'\r\n" +
+				"      ELSE t.TABLE_TYPE\r\n" +
+				"  END AS TABLE_TYPE,\r\n" +
+				"  t.TABLE_COMMENT AS REMARKS,\r\n" +
+				"  NULL AS TYPE_CAT,\r\n" +
+				"  NULL AS TYPE_SCHEM,\r\n" +
+				"  NULL AS TYPE_NAME,\r\n" +
+				"  NULL AS SELF_REFERENCING_COL_NAME,\r\n" +
+				"  NULL AS REF_GENERATION,\r\n" +
+				"  v.VIEW_DEFINITION AS "+_sQUERY_TEXT+"\r\n" +
+				"FROM information_schema.TABLES t\r\n" +
+        "  LEFT JOIN information_schema.VIEWS v\r\n" +
+		    "    ON(t.TABLE_CATALOG = v.TABLE_CATALOG AND t.TABLE_SCHEMA = v.TABLE_SCHEMA AND t.TABLE_NAME = v.TABLE_NAME)\r\n");
 
 		// where clause criteria
 		ArrayList<String> whereClauseComponents = new ArrayList<String>();
 		if(schemaPattern != null) {
-			whereClauseComponents.add("TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
+			whereClauseComponents.add("t.TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
 		}
 		if(tableNamePattern != null) {
-			whereClauseComponents.add("TABLE_NAME LIKE " + SqlLiterals.formatStringLiteral(tableNamePattern));
+			whereClauseComponents.add("t.TABLE_NAME LIKE " + SqlLiterals.formatStringLiteral(tableNamePattern));
 		}
 
 		// type criteria
@@ -923,7 +926,7 @@ public class MySqlDatabaseMetaData
 					sTypeList += ",";
 				}
 			}
-			whereClauseComponents.add("TABLE_TYPE IN (" + sTypeList + ")");
+			whereClauseComponents.add("t.TABLE_TYPE IN (" + sTypeList + ")");
 		}
 
 		if(whereClauseComponents.size() != 0) {
@@ -940,7 +943,7 @@ public class MySqlDatabaseMetaData
 		}
 
 		// order according to the JDBC specification
-		sb.append("ORDER BY TABLE_TYPE, TABLE_CAT, TABLE_SCHEM, TABLE_NAME");
+		sb.append("ORDER BY t.TABLE_TYPE, t.TABLE_CATALOG, t.TABLE_SCHEMA, t.TABLE_NAME");
 
 		Statement stmt = this.getConnection().createStatement();
 		return stmt.unwrap(Statement.class).executeQuery(sb.toString());
