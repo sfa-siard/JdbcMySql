@@ -287,6 +287,13 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
     try { print(_dmdMySql.getTables(null, TestSqlDatabase._sTEST_SCHEMA, "%", new String[] {"TABLE"})); }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   }
+  @Test
+  public void testGetViews()
+  {
+    enter();
+    try { print(_dmdMySql.getTables(null, TestSqlDatabase._sTEST_SCHEMA, "%", new String[] {"VIEW"})); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  }
   
   @Test
   @Override

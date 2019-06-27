@@ -1,6 +1,9 @@
 Release Notes for JdbcMySql 2.1
 ===============================
 
+2.1.??
+Corrected handling of QUERY_TEXT in getTables
+
 2.1.32
 Bugfixes (upload large VARCHAR columns)
 
