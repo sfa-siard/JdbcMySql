@@ -10,9 +10,8 @@ Created    : 30.10.2016, Simon Jutz
 ======================================================================*/
 package ch.admin.bar.siard2.mysql;
 
-import ch.enterag.utils.BU;
-import ch.enterag.sqlparser.Interval;
-import ch.enterag.sqlparser.SqlLiterals;
+import ch.enterag.utils.*;
+import ch.enterag.sqlparser.*;
 
 /* =============================================================================== */
 /**
