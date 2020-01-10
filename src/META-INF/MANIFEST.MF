@@ -7,7 +7,7 @@ Implementation-Title: MySql JDBC Wrapper
 Implementation-Version: 2.1.53
 Implementation-Vendor: Enter AG, Rüti ZH, Switzerland
 Built-Date: 02. Dec 2019
-Class-Path: mysql-connector-java-8.0.11.jar
+Class-Path: mysql-connector-java-8.0.18.jar
   jts-1.13.jar
   jdbcbase.jar
   sqlparser.jar

@@ -41,7 +41,7 @@ Created    : 09.05.2016, Hartwig Thomas
   <property name="cpjdbcbase" value="${dirlib}/${jarjdbcbase}"/> 
   <property name="cpjdbcbase-test" value="${dirlib}/${jarjdbcbase};${dirlib}/${jarjdbcbasetest}"/>
   <!-- MYSQL JDBC jars -->
-  <property name="jarmysqljdbc" value="mysql-connector-java-8.0.11.jar"/>
+  <property name="jarmysqljdbc" value="mysql-connector-java-8.0.18.jar"/>
   <property name="jarjts" value="jts-1.14.jar"/>
   <property name="cpmysqljdbc" value="${dirlib}/${jarmysqljdbc};${dirlib}/${jarjts}"/> 
   <!-- junit -->
