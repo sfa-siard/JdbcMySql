@@ -118,7 +118,7 @@ public class MySqlPredefinedType extends PredefinedType
           sType = "TEXT";
       }
       else
-        sType = "LONGTEXT";
+        sType = "TEXT";
     }
     else if (getType() == PreType.BINARY || 
       getType() == PreType.VARBINARY)
