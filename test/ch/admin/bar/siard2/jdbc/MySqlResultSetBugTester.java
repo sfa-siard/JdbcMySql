@@ -108,5 +108,7 @@ public class MySqlResultSetBugTester
     }
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   } /* testInsertRow */
+  
+  
 
 }

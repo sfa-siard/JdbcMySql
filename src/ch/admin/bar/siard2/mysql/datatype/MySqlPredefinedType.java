@@ -114,6 +114,8 @@ public class MySqlPredefinedType extends PredefinedType
         else if (l >= 256)
           sType = "TEXT";
       }
+      else
+        sType = "LONGTEXT";
     }
     else if (getType() == PreType.BINARY || 
       getType() == PreType.VARBINARY)
@@ -129,6 +131,8 @@ public class MySqlPredefinedType extends PredefinedType
         else if (l >= 256)
           sType = "BLOB";
       }
+      else
+        sType = "BLOB";
     }
 		else if (getType() == PreType.TIME ||
 				   getType() == PreType.TIMESTAMP ||

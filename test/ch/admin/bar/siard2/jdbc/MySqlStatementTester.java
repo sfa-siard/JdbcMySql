@@ -329,4 +329,25 @@ public class MySqlStatementTester extends BaseStatementTester
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   }
 
+  @Test
+  public void testCreateTable()
+  {
+    enter();
+    try { _stmtMySql.executeUpdate("DROP TABLE BUG479 CASCADE"); }
+    catch(SQLException se) { System.out.println(EU.getExceptionMessage(se)); }
+    try 
+    {
+      String sSql = "CREATE TABLE BUG479(ID INT, TEXT VARCHAR)";
+      int iResult = _stmtMySql.executeUpdate(sSql);
+      System.out.println("Result: "+String.valueOf(iResult));
+    }
+    catch(SQLTimeoutException ste) { fail(EU.getExceptionMessage(ste)); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+    finally
+    {
+      try { clean(); }
+      catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+    }
+  } /* testCreateTable */
+  
 }
