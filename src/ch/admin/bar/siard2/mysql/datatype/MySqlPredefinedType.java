@@ -105,6 +105,9 @@ public class MySqlPredefinedType extends PredefinedType
     {
       sType = sType + formatLength(); // (M)
       long l = getLength();
+      if ((l == (long)iUNDEFINED) && 
+          ((getType() == PreType.CHAR) || getType() == PreType.NCHAR))
+        l = 1;
       if (l != (long)iUNDEFINED)
       {
         if (l >= 16777216)
@@ -122,6 +125,9 @@ public class MySqlPredefinedType extends PredefinedType
     {
       sType = sType + formatLength(); // (M)
       long l = getLength();
+      if ((l == (long)iUNDEFINED) && 
+          (getType() == PreType.BINARY))
+        l = 1;
       if (getLength() != (long)iUNDEFINED)
       {
         if (l >= 16777216)
