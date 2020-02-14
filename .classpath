@@ -14,6 +14,6 @@
 	<classpathentry kind="lib" path="lib/jdbcbase-test.jar" sourcepath="/JdbcBase/test"/>
 	<classpathentry kind="lib" path="lib/jdbcbase.jar" sourcepath="/JdbcBase/src"/>
 	<classpathentry kind="lib" path="lib/sqlparser.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-8.0.11.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-8.0.18.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

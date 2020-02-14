@@ -105,6 +105,9 @@ public class MySqlPredefinedType extends PredefinedType
     {
       sType = sType + formatLength(); // (M)
       long l = getLength();
+      if ((l == (long)iUNDEFINED) && 
+          ((getType() == PreType.CHAR) || getType() == PreType.NCHAR))
+        l = 1;
       if (l != (long)iUNDEFINED)
       {
         if (l >= 16777216)
@@ -114,12 +117,17 @@ public class MySqlPredefinedType extends PredefinedType
         else if (l >= 256)
           sType = "TEXT";
       }
+      else
+        sType = "TEXT";
     }
     else if (getType() == PreType.BINARY || 
       getType() == PreType.VARBINARY)
     {
       sType = sType + formatLength(); // (M)
       long l = getLength();
+      if ((l == (long)iUNDEFINED) && 
+          (getType() == PreType.BINARY))
+        l = 1;
       if (getLength() != (long)iUNDEFINED)
       {
         if (l >= 16777216)
@@ -129,6 +137,8 @@ public class MySqlPredefinedType extends PredefinedType
         else if (l >= 256)
           sType = "BLOB";
       }
+      else
+        sType = "BLOB";
     }
 		else if (getType() == PreType.TIME ||
 				   getType() == PreType.TIMESTAMP ||

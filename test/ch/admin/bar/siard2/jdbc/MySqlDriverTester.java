@@ -97,7 +97,7 @@ public class MySqlDriverTester {
 			for (DriverPropertyInfo propInfo : aPropInfo) {
 				System.out.println(propInfo.name + ": " + propInfo.value + " (" + propInfo.description + ")");
 			}
-			assertEquals("Unexpected driver properties!", 189, aPropInfo.length);
+			assertEquals("Unexpected driver properties!", 194, aPropInfo.length);
 		} catch (SQLException se) {
 			fail(se.getClass().getName() + ": " + se.getMessage());
 		}
