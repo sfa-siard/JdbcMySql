@@ -4,9 +4,9 @@ Specification-Title: JDBC
 Specification-Version: 4
 Specification-Vendor: Enter AG, Rüti ZH, Switzerland
 Implementation-Title: MySql JDBC Wrapper
-Implementation-Version: 2.1.61
+Implementation-Version: 2.1.62
 Implementation-Vendor: Enter AG, Rüti ZH, Switzerland
-Built-Date: 24. Feb 2020
+Built-Date: 25. Sep 2020
 Class-Path: mysql-connector-java-8.0.18.jar
   jts-1.13.jar
   jdbcbase.jar
