@@ -34,12 +34,14 @@ jobs:
       - run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - run: /usr/bin/docker ps
       - name: Verify MySQL connection from host with host 127.0.0.1
+        continue-on-error: true
         run: |
-            sudo apt-get install -y mysql-client
+            sudo apt-get install -y mysql-client-8.0 mysql-client
             mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -ppassword -e "SHOW DATABASES"
       - name: Verify MySQL connection from host with host localhost
+        continue-on-error: true
         run: |
-            sudo apt-get install -y mysql-client
+            sudo apt-get install -y mysql-client-8.0 mysql-client
             mysql --host localhost --port ${{ job.services.mysql.ports['3306'] }} -uroot -ppassword -e "SHOW DATABASES"
       - uses: actions/checkout@v2
       - name: Set up JDK 8
