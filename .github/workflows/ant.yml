@@ -37,6 +37,10 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
+      - name: Install ant
+        run: |
+          sudo apt-get update
+          sudo apt-get install ant
       - name: Tests with Ant
         run: ant -noinput -buildfile build.xml test
       - name: Build with Ant
