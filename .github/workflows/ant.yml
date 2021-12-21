@@ -32,8 +32,6 @@ jobs:
     steps:
       - run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - uses: actions/checkout@v2
-        with:
-          path: 'repo'
       - name: Set up JDK 8
         uses: actions/setup-java@v2
         with:
