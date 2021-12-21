@@ -39,14 +39,14 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
-      - run: ls -la /home/runner/work/JdbcMySql/JdbcMySql/docker/mysql/config
+      - name: Build with Ant
+        run: ant -noinput -buildfile build.xml build
       - name: Tests with Ant
         run: ant -noinput -buildfile build.xml test
         continue-on-error: true
+      - run: ls -la
       - name: Upload output file
         uses: actions/upload-artifact@v2
         with:
           name: jdbc-tests.txt
-          path: ./tmp/jdbc-tests.txt
-      - name: Build with Ant
-        run: ant -noinput -buildfile build.xml build
+          path: ${{ github.workspace }}/tmp/jdbc-tests.txt
