@@ -44,7 +44,7 @@ jobs:
       - name: Tests with Ant
         run: ant -noinput -buildfile build.xml test
         continue-on-error: true
-      - run: ls -la
+      - run: ls -la ./tmp
       - name: Upload output file
         uses: actions/upload-artifact@v2
         with:
