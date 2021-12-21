@@ -37,6 +37,6 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
       - name: Tests with Ant
-          run: ant -noinput -buildfile build.xml test
+        run: ant -noinput -buildfile build.xml test
       - name: Build with Ant
         run: ant -noinput -buildfile build.xml test build
