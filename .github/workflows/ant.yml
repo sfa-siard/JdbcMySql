@@ -1,0 +1,40 @@
+# This workflow will build a Java project with Ant
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
+
+name: Test and build with ant
+
+on:
+  push:
+    branches:
+      - master
+      - dev/pitc-*
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    services:
+      # defines the postgres db service using Dockerfile-postgres. No data is loaded on startup
+      mysql:
+        image: mysql:5.7.36
+        env:
+          MYSQL_ROOT_PASSWORD: rootpwd
+          MYSQL_DATABASE: testschema
+          MYSQL_USER: testuser
+          MYSQL_PASSWORD: testpwd
+        volumes:
+          - ./docker/mysql/config:/etc/mysql/conf.d
+        ports:
+          - 3306:3306
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - name: Build with Ant
+        run: ant -noinput -buildfile build.xml tests build
