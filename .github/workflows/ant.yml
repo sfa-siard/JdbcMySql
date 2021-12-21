@@ -30,7 +30,7 @@ jobs:
           - 3306:3306
 
     steps:
-      - run: sudo chown -R $USER:$USER  ${{ github.workspace }}
+      - run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - uses: actions/checkout@v2
         with:
           path: 'repo'
@@ -39,7 +39,8 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
+      - run: ls -la
       - name: Tests with Ant
-        run: ant -noinput -buildfile build.xml test
+        run: ant -noinput -buildfile ${{ github.workspace }}/build.xml test
       - name: Build with Ant
-        run: ant -noinput -buildfile build.xml test build
+        run: ant -noinput -buildfile ${{ github.workspace }}/build.xml test build
