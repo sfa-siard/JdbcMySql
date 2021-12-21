@@ -245,7 +245,7 @@ Created    : 09.05.2016, Hartwig Thomas
   <property name="filedatasourcetest" value="datasource-test"/>
   <property name="classjdbctestsuite" value="ch.admin.bar.siard2.jdbc._MySqlJdbcTestSuite"/>
   <property name="filejdbctests" value="jdbc-tests"/>
-	<target name="tests" depends="jar" if="dbuser">
+	<target name="test" depends="jar" if="dbuser">
     <echo message="${ant.project.name}: tests"/>
 		<!-- build the tests -->
     <javac debug="true" debuglevel="${debuglevel}"
@@ -306,7 +306,7 @@ Created    : 09.05.2016, Hartwig Thomas
   
   <!-- create the JAR file containing all tests -->
   <property name="jartest" value="${ant.project.name}-test.jar"/>
-  <target name="jartest" depends="tests" if="dbuser">
+  <target name="jartest" depends="test" if="dbuser">
     <echo message="${ant.project.name}: jar"/>
     <jar jarfile="${dirdist}/${jartest}">
       <fileset dir="${dirbuildtests}">
@@ -317,7 +317,7 @@ Created    : 09.05.2016, Hartwig Thomas
   </target>
   
   <!-- create the ZIP file with binaries for Windows and LINUX -->
-  <target name="zip" depends="tests,jartest">
+  <target name="zip" depends="test,jartest">
     <echo message="${ant.project.name}: zip"/>
     <zip zipfile="${dirdist}/${ant.project.name}-${version}.${revision}.zip">
       <zipfileset dir="${dirdist}" prefix="${ant.project.name}/${dirlib}">
