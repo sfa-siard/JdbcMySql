@@ -25,7 +25,7 @@ jobs:
           MYSQL_USER: testuser
           MYSQL_PASSWORD: testpwd
         volumes:
-          - ${GITHUB_WORKSPACE}/docker/mysql/config:/etc/mysql/conf.d
+          - ${{ github.workspace }}/docker/mysql/config:/etc/mysql/conf.d
         ports:
           - 3306:3306
 
