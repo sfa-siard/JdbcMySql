@@ -13,10 +13,8 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     services:
-      # defines the postgres db service using Dockerfile-postgres. No data is loaded on startup
       mysql:
         image: mysql:5.7.36
         env:
@@ -24,10 +22,14 @@ jobs:
           MYSQL_DATABASE: testschema
           MYSQL_USER: testuser
           MYSQL_PASSWORD: testpwd
-        options: -v /home/runner/work/JdbcMySql/JdbcMySql/docker/mysql/config:/etc/mysql/conf.d --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+        options: >-
+          -v /home/runner/work/JdbcMySql/JdbcMySql/docker/mysql/config:/etc/mysql/conf.d 
+          --health-cmd="mysqladmin ping" 
+          --health-interval=5s 
+          --health-timeout=5s 
+          --health-retries=3
         ports:
           - 3306:3306
-
     steps:
       - run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - uses: actions/checkout@v2
@@ -39,5 +41,10 @@ jobs:
       - run: ls -la /home/runner/work/JdbcMySql/JdbcMySql/docker/mysql/config
       - name: Tests with Ant
         run: ant -noinput -buildfile build.xml test
+      - name: Upload output file
+        uses: actions/upload-artifact@v2
+        with:
+          name: jdbc-tests.txt
+          path: ./tmp/jdbc-tests.txt
       - name: Build with Ant
         run: ant -noinput -buildfile build.xml build
