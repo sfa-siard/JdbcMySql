@@ -30,7 +30,7 @@ jobs:
           - 3306:3306
 
     steps:
-      - run: sudo chown -R $USER:$USER /home/github/actions-runner/_work/JdbcMySql
+      - run: sudo chown -R $USER:$USER  ${{ github.workspace }}
       - uses: actions/checkout@v2
         with:
           path: 'repo'
