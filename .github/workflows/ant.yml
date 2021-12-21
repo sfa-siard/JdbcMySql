@@ -13,8 +13,8 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    container: ubuntu:latest
     services:
       # defines the postgres db service using Dockerfile-postgres. No data is loaded on startup
       mysql:
