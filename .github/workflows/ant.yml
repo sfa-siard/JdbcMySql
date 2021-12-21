@@ -36,8 +36,8 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
-      - run: ls -la
+      - run: ls -la /home/runner/work/JdbcMySql/JdbcMySql/docker/mysql/config
       - name: Tests with Ant
-        run: ant -noinput -buildfile ${{ github.workspace }}/build.xml test
+        run: ant -noinput -buildfile build.xml test
       - name: Build with Ant
-        run: ant -noinput -buildfile ${{ github.workspace }}/build.xml test build
+        run: ant -noinput -buildfile build.xml build
