@@ -24,10 +24,10 @@ jobs:
           MYSQL_PASSWORD: testpwd
         options: >-
           -v /home/runner/work/JdbcMySql/JdbcMySql/docker/mysql/config:/etc/mysql/conf.d 
-          --health-cmd="mysqladmin ping" 
-          --health-interval=5s 
-          --health-timeout=5s 
-          --health-retries=3
+          --health-cmd mysqladmin ping 
+          --health-interval 5s 
+          --health-timeout 5s 
+          --health-retries 3
         ports:
           - 3306:3306
     steps:
