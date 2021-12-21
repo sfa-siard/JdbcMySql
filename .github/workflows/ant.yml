@@ -45,7 +45,12 @@ jobs:
         run: ant -noinput -buildfile build.xml test
         continue-on-error: true
       - run: ls -la ./tmp
-      - name: Upload output file
+      - name: Upload datasource test output file
+        uses: actions/upload-artifact@v2
+        with:
+          name: datasource-test.txt
+          path: ${{ github.workspace}}/tmp/datasource-test.txt
+      - name: Upload test output file
         uses: actions/upload-artifact@v2
         with:
           name: jdbc-tests.txt
