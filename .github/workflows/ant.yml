@@ -36,11 +36,11 @@ jobs:
       - name: Verify MySQL connection from host with host 127.0.0.1
         continue-on-error: true
         run: |
-            mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -prootpwd -e "SHOW DATABASES"
+            mysql --host 127.0.0.1 --port 3306 -uroot -prootpwd -e "SHOW DATABASES"
       - name: Verify MySQL connection from host with host localhost
         continue-on-error: true
         run: |
-            mysql --host localhost --port ${{ job.services.mysql.ports['3306'] }} -uroot -prootpwd -e "SHOW DATABASES"
+            mysql --host localhost --port 3306 -uroot -prootpwd -e "SHOW DATABASES"
       - uses: actions/checkout@v2
       - name: Set up JDK 8
         uses: actions/setup-java@v2
