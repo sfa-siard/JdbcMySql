@@ -36,7 +36,7 @@ public class TestMySqlDatabase
             _sType.equals("MULTILINESTRING") ||
             _sType.equals("MULTIPOLYGON") ||
             _sType.equals("GEOMETRYCOLLECTION"))
-          sValueLiteral = "GeomFromText("+super.getValueLiteral()+")";
+          sValueLiteral = "ST_GeomFromText("+super.getValueLiteral()+")";
         else
           sValueLiteral = super.getValueLiteral();
       }
