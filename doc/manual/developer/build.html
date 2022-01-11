@@ -61,12 +61,19 @@ Copyright  : Enter AG, Joweid Zentrum 1, 8036 Rüti ZH, Switzerland, 2018
                 <p>Before any build is executed, the file <em>build.properties.template</em>
                   must be copied and the copy must be named <em>build.properties</em>.
                 <p>This file must be edited using a text editor to reflect 
-                  the local environment. (These property files as well as 
-                  the files with a <em>.txt</em> extension are assumed to 
-                  be in <em>ISO-8859-1</em> encoding, whereas all other text files 
-                  are assumed to be encoded in <em>UTF-8</em>.)
+                  the local environment.
                 <p>Please note, that building the project requires a configured
-                  access to a DB/2 database instance, which is used in the testing.</p> 
+                  access to a MySQL database instance, which is used in the testing.
+                  In order to support tests with LOB data, this MySQL instance must
+                  have the system variable <em>max_allowed_packet</em> set to <em>600M</em>
+                  in its <em>my.ini</em> configuration file.
+                </p>
+                <p>The BLOB files <em>blobpng0</em> and <em>bobflac0</em> etc. were not
+                  checked into Git because of their size. They can be downloaded from
+                  <a href="https://www.publicdomainpool.org/repository/picture/18-000001A.png">https://www.publicdomainpool.org/repository/picture/18-000001A.png</a>
+                  and <a href="https://www.publicdomainpool.org/repository/flac/18-000001A.flac">https://www.publicdomainpool.org/repository/flac/18-000001A.flac</a> etc.
+                  (Their content is irrelevant, only their size is needed here.)
+                </p> 
                 <p>If the property <em>git</em> is left undefined, no
                   interaction with any repositories takes place during the build.
                   It is possible, nevertheless, to create the project binaries
@@ -99,8 +106,15 @@ Copyright  : Enter AG, Joweid Zentrum 1, 8036 Rüti ZH, Switzerland, 2018
                   and <em>TestSqlDatabase</em> in package <em>ch.admin.bar.siard2.mysql</em>) 
                   and granting privileges to the "normal" user for all parts
                   of the test databases. The "normal" user is then used in
-                  all tests of the JDBC interface.</p> 
-                   
+                  all tests of the JDBC interface.</p>
+                  <p>
+                    Using a DBA user one can create a suitable <em>dbuser</em> with name "testuser" and his "testschema" using the following SQL statements:
+                  </p>
+                  <pre>
+CREATE USER 'testuser'@'%' IDENTIFIED BY 'testpwd'
+CREATE SCHEMA testschema
+GRANT ALL PRIVILEGES ON testschema.* TO 'testuser'@'%'
+</pre> 
                 <p class="pull-right">
                   <small><a href="#" class="icon icon--before icon--power hidden-print">Top of page</a></small>
                 </p>
