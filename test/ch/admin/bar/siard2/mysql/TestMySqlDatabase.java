@@ -88,7 +88,7 @@ public class TestMySqlDatabase
     listCdSimple.add(new ColumnDefinition("CTIME","TIME",new Time(12, 34, 56)));
     listCdSimple.add(new ColumnDefinition("CDATETIME","DATETIME",new Timestamp(2016-1900,10,30,12,34,56,0)));
     listCdSimple.add(new ColumnDefinition("CTIMESTAMP","TIMESTAMP",new Timestamp(2016-1900,10,30,12,34,56,0)));
-    listCdSimple.add(new ColumnDefinition("CYEAR","YEAR",new Date(2016-1900, 0, 1)));
+    listCdSimple.add(new ColumnDefinition("CYEAR","YEAR","2016"));
 
     // CLOB
     listCdSimple.add(new ColumnDefinition("CTINYTEXT","TINYTEXT","http://www.google.ch"));
