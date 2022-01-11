@@ -34,11 +34,9 @@ jobs:
       - run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - run: /usr/bin/docker ps
       - name: Verify MySQL connection from host with host 127.0.0.1
-        continue-on-error: true
         run: |
             mysql --host 127.0.0.1 --port 3306 -uroot -prootpwd -e "SHOW DATABASES"
       - name: Verify MySQL connection from host with host localhost
-        continue-on-error: true
         run: |
             mysql --host localhost --port 3306 -uroot -prootpwd -e "SHOW DATABASES"
       - uses: actions/checkout@v2
@@ -51,7 +49,6 @@ jobs:
         run: ant -noinput -buildfile build.xml build
       - name: Tests with Ant
         run: ant -noinput -buildfile build.xml test
-        continue-on-error: true
       - run: ls -la ./tmp
       - name: Upload datasource test output file
         uses: actions/upload-artifact@v2
