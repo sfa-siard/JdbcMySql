@@ -5,10 +5,8 @@ services:
     image: mariadb:latest
     environment:
       MYSQL_ROOT_PASSWORD: rootpwd
-      MYSQL_DATABASE: testschema
-      MYSQL_USER: testuser
-      MYSQL_PASSWORD: testpwd
     volumes:
       - ./docker/mysql/config:/etc/mysql/conf.d
+      - ./docker/mysql/scripts:/docker-entrypoint-initdb.d
     ports:
       - 3306:3306
