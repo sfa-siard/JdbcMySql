@@ -1112,7 +1112,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
           if (o instanceof Date)
           {
             Date date = (Date)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",(Date)tcd.getValue(),date);
+            assertEquals("Invalid value for "+tcd.getType()+"!", tcd.getValue(),date);
           }
           else
             fail("Type Date expected for "+tcd.getType()+"!");
