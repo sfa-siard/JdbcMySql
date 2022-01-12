@@ -4,6 +4,9 @@ services:
   mariadb:
     image: mariadb:latest
     environment:
+      MYSQL_DATABASE: testschema
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpwd
       MYSQL_ROOT_PASSWORD: rootpwd
     volumes:
       - ./docker/mysql/config:/etc/mysql/conf.d
