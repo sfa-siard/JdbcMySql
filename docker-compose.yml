@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   mariadb:
-    image: mysql:latest
+    image: mariadb:latest
     environment:
       MYSQL_DATABASE: testschema
       MYSQL_USER: testuser
