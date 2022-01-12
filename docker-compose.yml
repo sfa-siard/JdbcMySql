@@ -1,8 +1,8 @@
 version: '3.9'
 
 services:
-  mariadb:
-    image: mariadb:latest
+  mysql:
+    image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: rootpwd
     volumes:
