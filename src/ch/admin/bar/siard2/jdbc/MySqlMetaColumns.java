@@ -74,6 +74,7 @@ public class MySqlMetaColumns extends MySqlResultSet
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.MULTILINESTRING, PreType.CLOB);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.MULTIPOLYGON, PreType.CLOB);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.GEOMETRYCOLLECTION, PreType.CLOB);
+		mapNAME_MYSQL_TO_ISO.put(MySqlType.JSON, PreType.CLOB);
 	}
 
 	private static final int iMAX_VARCHAR_LENGTH = 21845; 

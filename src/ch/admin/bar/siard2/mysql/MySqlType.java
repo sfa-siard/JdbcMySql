@@ -52,7 +52,8 @@ public enum MySqlType {
 	MULTIPOINT("multipoint"),
 	MULTILINESTRING("multilinestring"),
 	MULTIPOLYGON("multipolygon"),
-	GEOMETRYCOLLECTION("geometrycollection");
+	GEOMETRYCOLLECTION("geometrycollection"),
+	JSON("json");
 	
 	private String sTypeName = null;
 	
