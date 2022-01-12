@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - uses: actions/checkout@v2
       - name: Set up JDK 8
         uses: actions/setup-java@v2
@@ -38,19 +37,12 @@ jobs:
           # https://docs.docker.com/compose/reference/overview/
           cli-args: "logs"
       - name: Verify MySQL connection from host with host 127.0.0.1
-        continue-on-error: true
         run: |
           mysql --host 127.0.0.1 --port 3306 -uroot -prootpwd -e "SHOW DATABASES"
-      - name: Verify MySQL connection from host with host localhost
-        continue-on-error: true
-        run: |
-          mysql --host localhost --port 3306 -uroot -pprootpwd -e "SHOW DATABASES"
       - name: Build with Ant
         run: ant -noinput -buildfile build.xml build
-        continue-on-error: true
       - name: Tests with Ant
         run: ant -noinput -buildfile build.xml test
-        continue-on-error: true
       - run: ls -la ./tmp
       - name: Upload datasource test output file
         uses: actions/upload-artifact@v2
