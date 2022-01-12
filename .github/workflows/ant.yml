@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - run: sudo chown -R $USER:$USER ${{ github.workspace }}
       - uses: actions/checkout@v2
       - name: Set up JDK 8
         uses: actions/setup-java@v2
@@ -36,6 +37,16 @@ jobs:
         with:
           # https://docs.docker.com/compose/reference/overview/
           cli-args: "logs"
+      - name: Verify MySQL connection from host with host 127.0.0.1
+        continue-on-error: true
+        run: |
+          sudo apt-get install -y mysql-client-8.0 mysql-client
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -ppassword -e "SHOW DATABASES"
+      - name: Verify MySQL connection from host with host localhost
+        continue-on-error: true
+        run: |
+          sudo apt-get install -y mysql-client-8.0 mysql-client
+          mysql --host localhost --port ${{ job.services.mysql.ports['3306'] }} -uroot -ppassword -e "SHOW DATABASES"
       - name: Build with Ant
         run: ant -noinput -buildfile build.xml build
       - name: Tests with Ant
