@@ -27,6 +27,10 @@ jobs:
         with:
           # https://docs.docker.com/compose/reference/overview/
           cli-args: "up -d"
+      # TODO: find a better way to wait until the database is ready
+      - name: Sleep for 10 seconds
+        run: sleep 10s
+        shell: bash
       - name: Build with Ant
         run: ant -noinput -buildfile build.xml build
       - name: Tests with Ant
