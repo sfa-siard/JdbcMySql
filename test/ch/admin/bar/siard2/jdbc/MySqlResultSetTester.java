@@ -2260,12 +2260,14 @@ public class MySqlResultSetTester extends BaseResultSetTester
       assertEquals("Insert of "+tcd.getType()+" failed!",
         ((Interval)tcd.getValue()).toDuration(),
         ((BaseResultSet)getResultSet()).getDuration(tcd.getName()));
+    }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+    finally {
       // restore the database
       tearDown();
       setUpClass();
       setUp();
     }
-    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   } /* testInsertRowSimple */
   
   @Test
