@@ -70,6 +70,10 @@ public enum MySqlType {
 	 * @return enum constant with the given type name
 	 */
 	public static MySqlType getByTypeName(String _sTypeName) {
+		// workaround for failing test with mysql 8.0
+		if(_sTypeName.equals("geomcollection")) {
+			return GEOMETRYCOLLECTION;
+		}
 		MySqlType result = null;
 		for(int i=0;i<MySqlType.values().length;i++) {
 			MySqlType t = MySqlType.values()[i];
