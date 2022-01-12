@@ -47,8 +47,10 @@ jobs:
           mysql --host localhost --port 3306 -uroot -pprootpwd -e "SHOW DATABASES"
       - name: Build with Ant
         run: ant -noinput -buildfile build.xml build
+        continue-on-error: true
       - name: Tests with Ant
         run: ant -noinput -buildfile build.xml test
+        continue-on-error: true
       - run: ls -la ./tmp
       - name: Upload datasource test output file
         uses: actions/upload-artifact@v2
