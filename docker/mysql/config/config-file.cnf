@@ -1,7 +1,10 @@
+[server]
+default-time-zone=+01:00
+
 [mysqld]
-default-time-zone = "+01:00"
 #allow larger BLOBs to be stored
 max_allowed_packet = 100M
+character-set-server = utf8mb4
 default_authentication_plugin=mysql_native_password
 
 bind-address = 0.0.0.0
