@@ -182,6 +182,8 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
             case "multilinestring": assertEquals("Invalid multilinestring mapping!",Types.CLOB,iDataType); break;
             case "multipolygon": assertEquals("Invalid multipolygon mapping!",Types.CLOB,iDataType); break;
             case "geometrycollection": assertEquals("Invalid geometrycollection mapping!",Types.CLOB,iDataType); break;
+            // new with mysql 8.0
+            case "geomcollection": assertEquals("Invalid geometrycollection mapping!",Types.CLOB,iDataType); break;
             case "enum": assertEquals("Invalid enum mapping!",Types.VARCHAR,iDataType); break;
             case "set": assertEquals("Invalid set mapping!",Types.VARCHAR,iDataType); break;
             default:
