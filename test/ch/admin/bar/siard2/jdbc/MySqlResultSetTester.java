@@ -1112,7 +1112,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
           if (o instanceof Date)
           {
             Date date = (Date)o;
-            assertEquals("Invalid value for "+tcd.getType()+"!",(Date)tcd.getValue(),date);
+            assertEquals("Invalid value for "+tcd.getType()+"!", tcd.getValue(),date);
           }
           else
             fail("Type Date expected for "+tcd.getType()+"!");
@@ -2260,12 +2260,14 @@ public class MySqlResultSetTester extends BaseResultSetTester
       assertEquals("Insert of "+tcd.getType()+" failed!",
         ((Interval)tcd.getValue()).toDuration(),
         ((BaseResultSet)getResultSet()).getDuration(tcd.getName()));
+    }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+    finally {
       // restore the database
       tearDown();
       setUpClass();
       setUp();
     }
-    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   } /* testInsertRowSimple */
   
   @Test
