@@ -151,7 +151,7 @@ Created    : 09.05.2016, Hartwig Thomas
   </target>
   
   <!-- build the JdbcMySql classes -->
-  <target name="build" depends="init,revision">
+  <target name="build" depends="init">
     <echo message="${ant.project.name}: build"/>
     <!-- without this, the package-info class is not generated! -->
     <touch>
@@ -168,13 +168,23 @@ Created    : 09.05.2016, Hartwig Thomas
       destdir="${dirbuildclasses}">
     </javac>
   </target>
+
+  <property name="jarfile" value="${ant.project.name}.jar"/>
+  <target name="jar-test" depends="build">
+    <echo message="${ant.project.name}: jar"/>
+    <jar jarfile="${dirdist}/${jarfile}">
+      <fileset dir="${dirbuildclasses}">
+        <include name="**/*.class"/>
+        <include name="**/res/*.*"/>
+      </fileset>
+    </jar>
+  </target>
   
   <!-- create the JAR file containing all classes -->
   <property name="jarfile" value="${ant.project.name}.jar"/>
-  <target name="jar" depends="build">
+  <target name="jar" depends="revision, test">
     <echo message="${ant.project.name}: jar"/>
-    <jar jarfile="${dirdist}/${jarfile}"
-       manifest="${filemanifest}">
+    <jar jarfile="${dirdist}/${jarfile}" manifest="${filemanifest}">
       <fileset dir="${dirbuildclasses}">
         <include name="**/*.class"/>
         <include name="**/res/*.*"/>
@@ -187,7 +197,7 @@ Created    : 09.05.2016, Hartwig Thomas
   <property name="filedatasourcetest" value="datasource-test"/>
   <property name="classjdbctestsuite" value="ch.admin.bar.siard2.jdbc._MySqlJdbcTestSuite"/>
   <property name="filejdbctests" value="jdbc-tests"/>
-	<target name="test" depends="jar" if="dbuser">
+	<target name="test" depends="jar-test" if="dbuser">
     <echo message="${ant.project.name}: tests"/>
 		<!-- build the tests -->
     <javac debug="true" debuglevel="${debuglevel}"
@@ -248,9 +258,10 @@ Created    : 09.05.2016, Hartwig Thomas
   
   <!-- create the JAR file containing all tests -->
   <property name="jartest" value="${ant.project.name}-test.jar"/>
-  <target name="jartest" depends="test" if="dbuser">
+  <target name="jar-with-all-tests" depends="test,revision" if="dbuser">
     <echo message="${ant.project.name}: jar"/>
-    <jar jarfile="${dirdist}/${jartest}">
+    <jar jarfile="${dirdist}/${jartest}"
+         manifest="${filemanifest}">
       <fileset dir="${dirbuildtests}">
         <include name="**/*.class"/>
         <include name="**/res/*.*"/>
@@ -259,7 +270,7 @@ Created    : 09.05.2016, Hartwig Thomas
   </target>
   
   <!-- create the ZIP file with binaries for Windows and LINUX -->
-  <target name="zip" depends="test,jartest">
+  <target name="release" depends="jar,jar-with-all-tests">
     <echo message="${ant.project.name}: zip"/>
     <zip zipfile="${dirdist}/${ant.project.name}-${version}.${revision}.zip">
       <zipfileset dir="${dirdist}" prefix="${ant.project.name}/${dirlib}">
