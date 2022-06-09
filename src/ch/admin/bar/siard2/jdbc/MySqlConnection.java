@@ -40,8 +40,7 @@ public class MySqlConnection extends BaseConnection implements Connection {
 	/*------------------------------------------------------------------*/
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @param connWrapped Connection to be wrapped
+	 *
 	 * @throws SQLException
 	 */
 	public MySqlConnection(Connection connNative) throws SQLException 
@@ -266,5 +265,10 @@ public class MySqlConnection extends BaseConnection implements Connection {
     CallableStatement cs = super.prepareCall(sNative, resultSetType, resultSetConcurrency, resultSetHoldability);
     return cs;
 	} /* prepareCall */
+
+	@Override
+	public Object createDatalinkObject() throws SQLException {
+		return createBlob();
+	}
 	
 } /* class MySqlConnection */
