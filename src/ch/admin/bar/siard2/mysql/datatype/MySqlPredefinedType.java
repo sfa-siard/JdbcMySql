@@ -50,6 +50,7 @@ public class MySqlPredefinedType extends PredefinedType
 		mapISO_TO_MYSQL.put(PreType.TIME, "TIME");
 		mapISO_TO_MYSQL.put(PreType.TIMESTAMP, "DATETIME");
 		mapISO_TO_MYSQL.put(PreType.INTERVAL, "VARBINARY");
+		mapISO_TO_MYSQL.put(PreType.DATALINK, "LONGBLOB");
 	}
 	/**
 	 * Constructor
@@ -160,7 +161,7 @@ public class MySqlPredefinedType extends PredefinedType
 		      sType = "MEDIUMTEXT"; // 3 bytes
 		  }
 		}
-    else if ((getType() == PreType.BLOB))
+    else if ((getType() == PreType.BLOB) || getType() == PreType.DATALINK)
     {
       if (getLength() != iUNDEFINED)
       {

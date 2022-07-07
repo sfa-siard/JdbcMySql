@@ -21,6 +21,8 @@ public class TestSqlDatabase
 {
   public static final String _sTEST_SCHEMA = "TESTSQLSCHEMA";
   private static final String _sTEST_TABLE_SIMPLE = "TSQLSIMPLE";
+  public static final String COLUMN_DATALINK = "COLUMN_DATALINK";
+
   public static QualifiedId getQualifiedSimpleTable() { return new QualifiedId(null,_sTEST_SCHEMA,_sTEST_TABLE_SIMPLE); }
   /** MySQL does not really have any complex (DISTINCT, UDT, ARRAY) types,
    * but we define a "complex table anyway, in order to exercise foreign
@@ -34,6 +36,7 @@ public class TestSqlDatabase
   private static final int _iMaxNonLobLength = 256;
 
   private static int _iPrimarySimple = -1;
+
   @SuppressWarnings("deprecation")
   private static List<TestColumnDefinition> getListCdSimple()
   {

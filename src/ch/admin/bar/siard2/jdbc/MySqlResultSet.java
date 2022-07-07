@@ -11,6 +11,8 @@ Created    : 31.10.2016, Simon Jutz
 package ch.admin.bar.siard2.jdbc;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.*;
 
 import javax.xml.datatype.*;
@@ -75,75 +77,69 @@ public class MySqlResultSet
 	} /* getMetaData */
 
   /* ------------------------------------------------------------------------ */
-	private Object mapObject(Object o, int iType) throws SQLException 
-	{
-	  if ((o instanceof String) && (iType == Types.LONGVARCHAR))
-	  {
-      Clob clob = getStatement().getConnection().createClob();
-      clob.setString(1l, (String)o);
-      o = clob;
+  private Object mapObject(Object o, int iType) throws SQLException {
+	  if ((o instanceof String) && (iType == Types.LONGVARCHAR)) {
+		  Clob clob = getStatement().getConnection().createClob();
+		  clob.setString(1l, (String) o);
+		  o = clob;
+	  } else if ((o instanceof String) && (iType == Types.LONGNVARCHAR)) {
+		  NClob nclob = getStatement().getConnection().createNClob();
+		  nclob.setString(1l, (String) o);
+		  o = nclob;
+	  } else if (o instanceof String && iType == Types.DATALINK) {
+		  try {
+			  o = new URL((String) o);
+		  } catch (MalformedURLException e) {
+			  throw new RuntimeException(e);
+		  }
+	  } else if ((o instanceof byte[]) && (iType == Types.LONGVARBINARY)) {
+		  Blob blob = getStatement().getConnection().createBlob();
+		  blob.setBytes(1l, (byte[]) o);
+		  o = blob;
+	  } else if ((o instanceof Integer) && (iType == Types.SMALLINT)) {
+		  Integer i = (Integer) o;
+		  Short sh = Short.valueOf(i.shortValue());
+		  o = sh;
+	  } else if ((o instanceof Integer) && (iType == Types.TINYINT)) {
+		  Integer i = (Integer) o;
+		  Short sh = Short.valueOf(i.shortValue());
+		  o = sh;
 	  }
-	  else if ((o instanceof String) && (iType == Types.LONGNVARCHAR))
-	  {
-      NClob nclob = getStatement().getConnection().createNClob();
-      nclob.setString(1l, (String)o);
-      o = nclob;
-	  }
-	  else if ((o instanceof byte[]) && (iType == Types.LONGVARBINARY))
-	  {
-      Blob blob = getStatement().getConnection().createBlob();
-      blob.setBytes(1l, (byte[])o);
-      o = blob;
-	  }
-	  else if ((o instanceof Integer) && (iType == Types.SMALLINT))
-	  {
-	    Integer i = (Integer)o;
-	    Short sh = Short.valueOf(i.shortValue());
-	    o = sh;
-	  }
-    else if ((o instanceof Integer) && (iType == Types.TINYINT))
-    {
-      Integer i = (Integer)o;
-      Short sh = Short.valueOf(i.shortValue());
-      o = sh;
-    }
-		return o;
-	} /* mapObject */
+	  return o;
+  }
 
   /* ------------------------------------------------------------------------ */
   /** {@inheritDoc} */
-	@Override
-	public Object getObject(int columnIndex) throws SQLException 
-	{
+  @Override
+  public Object getObject(int columnIndex) throws SQLException {
 	  Object o = super.getObject(columnIndex);
-		int iType = getMetaData().unwrap(ResultSetMetaData.class).getColumnType(columnIndex);
-		String sColumnType = getMetaData().getColumnTypeName(columnIndex);
-		int iDisplaySize = getMetaData().getColumnDisplaySize(columnIndex);
-		if(sColumnType.equals("GEOMETRY") ||
-			 sColumnType.equals("POINT") ||
-			 sColumnType.equals("LINESTRING") ||
-			 sColumnType.equals("POLYGON") ||
-			 sColumnType.equals("MULTIPOINT") ||
-			 sColumnType.equals("MULTILINESTRING") ||
-			 sColumnType.equals("MULTIPOLYGON") ||
-			 sColumnType.equals("GEOMETRYCOLLECTION"))
-		{
-      try { o = getGeometryFromInputStream(new ByteArrayInputStream((byte[]) o)).toText(); }
-      catch (Exception e) { throw new SQLException("Parsing of Geometry failed!",e); }
-		}
-		else if (sColumnType.equals("SMALLINT UNSIGNED"))
+	  int iType = getMetaData().unwrap(ResultSetMetaData.class).getColumnType(columnIndex);
+	  String sColumnType = getMetaData().getColumnTypeName(columnIndex);
+	  int iDisplaySize = getMetaData().getColumnDisplaySize(columnIndex);
+	  if (sColumnType.equals("GEOMETRY") ||
+			  sColumnType.equals("POINT") ||
+			  sColumnType.equals("LINESTRING") ||
+			  sColumnType.equals("POLYGON") ||
+			  sColumnType.equals("MULTIPOINT") ||
+			  sColumnType.equals("MULTILINESTRING") ||
+			  sColumnType.equals("MULTIPOLYGON") ||
+			  sColumnType.equals("GEOMETRYCOLLECTION")) {
+		  try {
+			  o = getGeometryFromInputStream(new ByteArrayInputStream((byte[]) o)).toText();
+		  } catch (Exception e) {
+			  throw new SQLException("Parsing of Geometry failed!", e);
+		  }
+	  } else if (sColumnType.equals("SMALLINT UNSIGNED"))
 		  o = mapObject(o, Types.INTEGER);
-		else if (sColumnType.equals("VARCHAR"))
-		{
+	  else if (sColumnType.equals("VARCHAR")) {
 		  if (iDisplaySize < 256)
-		    o = mapObject(o, Types.VARCHAR);
+			  o = mapObject(o, Types.VARCHAR);
 		  else
-		    o = mapObject(o, iType);
-		}
-		else
+			  o = mapObject(o, iType);
+	  } else
 		  o = mapObject(o, iType);
-		return o;
-	} /* getObject */
+	  return o;
+  }
 
   /* ------------------------------------------------------------------------ */
   /** {@inheritDoc} */
@@ -477,16 +473,14 @@ public class MySqlResultSet
   /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
   @Override
-  public void updateObject(int columnIndex, Object x)
-    throws SQLException
-  {
-    if (x instanceof SQLXML)
-      updateSQLXML(columnIndex, (SQLXML)x);
-    else if (x instanceof NClob)
-      updateNClob(columnIndex, (NClob)x);
-    else
-      super.updateObject(columnIndex,x);
-  } /* updateObject */
+  public void updateObject(int columnIndex, Object x) throws SQLException {
+	  if (x instanceof SQLXML)
+		  updateSQLXML(columnIndex, (SQLXML) x);
+	  else if (x instanceof NClob)
+		  updateNClob(columnIndex, (NClob) x);
+	  else
+		  super.updateObject(columnIndex, x);
+  }
 
   /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
@@ -627,7 +621,17 @@ public class MySqlResultSet
     catch(SQLFeatureNotSupportedException sfnse) { throw sfnse; }
     catch(SQLException se) { throw new SQLFeatureNotSupportedException("updateAsciiStream not supported!",se); }
   } /* updateAsciiStream */
-  
+
+	public URL updateURL(int columnIndex, URL url) throws SQLException {
+		super.updateObject(columnIndex, url.getPath());
+		return url;
+	}
+
+	public URL updateURL(String columnLabel, URL url) throws SQLException {
+		updateURL(this.findColumn(columnLabel), url);
+		return url;
+	}
+
   /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
   @Override
