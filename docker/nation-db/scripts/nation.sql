@@ -80,6 +80,10 @@ INSERT INTO `countries` VALUES (1,'Aruba',193.00,NULL,'AW','ABW',1),(2,'Afghanis
 /*!40000 ALTER TABLE `countries` ENABLE KEYS */;
 UNLOCK TABLES;
 
+-- Workaround for SIARD: Dates with null value do not seem to work - drop column national_day - this is an issue in itself
+alter table countries
+  drop column national_day;
+
 --
 -- Table structure for table `country_languages`
 --
