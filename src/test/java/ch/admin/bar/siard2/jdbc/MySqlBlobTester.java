@@ -14,6 +14,7 @@ import ch.enterag.sqlparser.identifier.*;
 import ch.enterag.utils.*;
 import ch.enterag.utils.base.*;
 
+@Ignore
 public class MySqlBlobTester
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();

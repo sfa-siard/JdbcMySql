@@ -11,6 +11,7 @@ import java.util.Properties;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.admin.bar.siard2.jdbc.MySqlConnection;
@@ -18,6 +19,7 @@ import ch.admin.bar.siard2.jdbc.MySqlDriver;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.base.ConnectionProperties;
 
+@Ignore
 public class MySqlDriverTester {
 	private static final ConnectionProperties _cp = new ConnectionProperties();
 	

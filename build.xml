@@ -72,7 +72,7 @@ Created    : 09.05.2016, Hartwig Thomas
   </target>
   
   <!-- check if mainfest and local build properties are available -->
-  <property name="filemanifest" value="${dirsrc}/META-INF/MANIFEST.MF"/>
+  <property name="filemanifest" value="src/main/resources/META-INF/MANIFEST.MF"/>
   <property name="filerevoldproperties" value="${dirtmp}/revold.properties"/>
   <property name="filegithead" value=".git/HEAD"/>
   <property name="filebranchproperties" value="${dirtmp}/branch.properties"/>

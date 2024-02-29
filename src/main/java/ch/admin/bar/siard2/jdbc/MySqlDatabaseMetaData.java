@@ -905,7 +905,7 @@ public class MySqlDatabaseMetaData
 		    "    ON(t.TABLE_CATALOG = v.TABLE_CATALOG AND t.TABLE_SCHEMA = v.TABLE_SCHEMA AND t.TABLE_NAME = v.TABLE_NAME)\r\n");
 
 		// where clause criteria
-		ArrayList<String> whereClauseComponents = new ArrayList<String>();
+		final ArrayList<String> whereClauseComponents = new ArrayList<>();
 		if(schemaPattern != null) {
 			whereClauseComponents.add("t.TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
 		}

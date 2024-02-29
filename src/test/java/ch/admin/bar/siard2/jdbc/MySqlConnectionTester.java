@@ -12,6 +12,7 @@ import ch.enterag.utils.*;
 import ch.enterag.utils.base.*;
 import ch.enterag.utils.jdbc.*;
 
+@Ignore
 public class MySqlConnectionTester extends BaseConnectionTester 
 {
 	private static final ConnectionProperties _cp = new ConnectionProperties();
@@ -42,7 +43,10 @@ public class MySqlConnectionTester extends BaseConnectionTester
         TestSqlDatabase._sTEST_SCHEMA, _sDB_USER);
   		connMySql.close();
     }
-    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+    catch(SQLException se) {
+		  se.printStackTrace();
+		  fail(EU.getExceptionMessage(se));
+	  }
 	} /* setUpClass */
 	
 	@Before

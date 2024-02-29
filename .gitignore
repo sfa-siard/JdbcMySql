@@ -20,3 +20,4 @@ out/
 .tool-versions
 
 ./target
+.gradle

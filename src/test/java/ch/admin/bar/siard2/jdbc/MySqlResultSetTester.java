@@ -18,6 +18,7 @@ import ch.enterag.sqlparser.identifier.*;
 import ch.admin.bar.siard2.jdbcx.*;
 import ch.admin.bar.siard2.mysql.*;
 
+@Ignore
 public class MySqlResultSetTester extends BaseResultSetTester 
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();

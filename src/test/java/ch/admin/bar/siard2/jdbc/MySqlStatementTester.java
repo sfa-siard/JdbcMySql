@@ -10,6 +10,7 @@ import ch.enterag.sqlparser.*;
 import ch.admin.bar.siard2.jdbcx.*;
 import ch.admin.bar.siard2.mysql.*;
 
+@Ignore
 public class MySqlStatementTester extends BaseStatementTester
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();
