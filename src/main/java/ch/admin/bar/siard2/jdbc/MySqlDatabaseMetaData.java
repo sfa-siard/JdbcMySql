@@ -906,6 +906,12 @@ public class MySqlDatabaseMetaData
 
 		// where clause criteria
 		final ArrayList<String> whereClauseComponents = new ArrayList<>();
+
+		// The performance_schema in MySQL is a storage engine that provides a detailed and instrumented view of server
+		// execution at runtime, aiding in performance monitoring and analysis.
+		// Should not be archived and needs to be excluded here.
+		whereClauseComponents.add("t.TABLE_SCHEMA NOT LIKE 'performance_schema'");
+
 		if(schemaPattern != null) {
 			whereClauseComponents.add("t.TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
 		}
