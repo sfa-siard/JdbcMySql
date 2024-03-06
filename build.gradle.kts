@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
     implementation("org.antlr:antlr4-runtime:4.5.2-1")
+    implementation("com.mysql:mysql-connector-j:8.3.0")
 
     // legacy dependencies -
     implementation(fileTree("lib") { include("*.jar") })

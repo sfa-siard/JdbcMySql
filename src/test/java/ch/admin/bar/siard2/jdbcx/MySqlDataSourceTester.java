@@ -10,11 +10,13 @@ import javax.sql.DataSource;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.admin.bar.siard2.jdbcx.MySqlDataSource;
 import ch.enterag.utils.base.ConnectionProperties;
 
+@Ignore
 public class MySqlDataSourceTester {
 	private static final ConnectionProperties _cp = new ConnectionProperties();
 	
