@@ -9,8 +9,6 @@ on:
   push:
     branches:
       - main
-      - feature/*
-      - issue/*
 
 jobs:
   execute-unit-tests:
