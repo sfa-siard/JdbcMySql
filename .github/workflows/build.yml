@@ -4,8 +4,11 @@
 name: Build project
 
 on:
+  pull_request:
+    branches: [ main ]
   push:
     branches:
+      - main
       - feature/*
       - issue/*
 
