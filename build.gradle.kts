@@ -42,14 +42,3 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
-
-tasks.jar {
-    archiveFileName.set("jdbcmysql.jar")
-}
-
-tasks.getByName("assemble").dependsOn("testJar")
-
-tasks.register<Jar>("testJar") {
-    archiveFileName.set("jdbcmysql-test.jar")
-    from(project.the<SourceSetContainer>()["test"].output)
-}
