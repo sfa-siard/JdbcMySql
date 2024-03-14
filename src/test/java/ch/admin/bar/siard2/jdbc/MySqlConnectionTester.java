@@ -12,8 +12,7 @@ import ch.enterag.utils.*;
 import ch.enterag.utils.base.*;
 import ch.enterag.utils.jdbc.*;
 
-@Ignore
-public class MySqlConnectionTester extends BaseConnectionTester 
+public class MySqlConnectionTester extends BaseConnectionTester
 {
 	private static final ConnectionProperties _cp = new ConnectionProperties();
 	private static final String _sDB_URL = MySqlDriver.getUrl(_cp.getHost() + ":" + _cp.getPort()+"/"+_cp.getCatalog(),true);

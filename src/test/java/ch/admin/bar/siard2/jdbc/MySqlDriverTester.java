@@ -19,7 +19,6 @@ import ch.admin.bar.siard2.jdbc.MySqlDriver;
 import ch.enterag.utils.EU;
 import ch.enterag.utils.base.ConnectionProperties;
 
-@Ignore
 public class MySqlDriverTester {
 	private static final ConnectionProperties _cp = new ConnectionProperties();
 	

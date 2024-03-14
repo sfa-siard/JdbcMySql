@@ -18,8 +18,7 @@ import ch.enterag.sqlparser.identifier.*;
 import ch.admin.bar.siard2.jdbcx.*;
 import ch.admin.bar.siard2.mysql.*;
 
-@Ignore
-public class MySqlResultSetTester extends BaseResultSetTester 
+public class MySqlResultSetTester extends BaseResultSetTester
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();
   private static final String _sDB_URL = MySqlDriver.getUrl(_cp.getHost() + ":" + _cp.getPort()+"/"+_cp.getCatalog(),true);
@@ -2128,10 +2127,14 @@ public class MySqlResultSetTester extends BaseResultSetTester
       assertEquals("Insert of "+tcd.getType()+" failed!",
         (String)tcd.getValue(),
         clob.getSubString(1l, (int)clob.length()));
+
       tcd = findColumnDefinition(_listCdSimple,"CNCHAR_5");
+
+      final String resultSetValue = getResultSet().getString(tcd.getName());
       assertEquals("Insert of "+tcd.getType()+" failed!",
-        (String)tcd.getValue(),
-        (getResultSet().getString(tcd.getName())).substring(0,((String)tcd.getValue()).length()));
+              tcd.getValue(),
+              resultSetValue.substring(0,((String)tcd.getValue()).length()));
+
       tcd = findColumnDefinition(_listCdSimple,"CNVARCHAR_127");
       assertEquals("Insert of "+tcd.getType()+" failed!",
         (String)tcd.getValue(),

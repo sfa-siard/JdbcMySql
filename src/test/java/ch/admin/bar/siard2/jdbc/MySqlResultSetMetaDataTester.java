@@ -11,8 +11,7 @@ import ch.enterag.sqlparser.identifier.*;
 import ch.admin.bar.siard2.jdbcx.*;
 import ch.admin.bar.siard2.mysql.*;
 
-@Ignore
-public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester 
+public class MySqlResultSetMetaDataTester extends BaseResultSetMetaDataTester
 {
   private static final ConnectionProperties _cp = new ConnectionProperties();
   private static final String _sDB_URL = MySqlDriver.getUrl(_cp.getHost() + ":" + _cp.getPort()+"/"+_cp.getCatalog(),true);

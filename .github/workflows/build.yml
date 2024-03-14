@@ -1,21 +1,17 @@
 # This workflow will build a Java project with Ant
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
 
-name: Test and build with ant
+name: Build project
 
 on:
   push:
     branches:
-      - main
-      - dev/pitc-*
       - feature/*
-  pull_request:
-    branches: [ main ]
+      - issue/*
 
 jobs:
-  build:
+  execute-unit-tests:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 8
@@ -23,13 +19,14 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
+
+       # Tests need a running DB instance
       - name: run docker-compose
         uses: sudo-bot/action-docker-compose@latest
         with:
           # https://docs.docker.com/compose/reference/overview/
           cli-args: "up -d --build"
-      # TODO: find a better way to wait until the database is ready
-      - name: Sleep for 20 seconds
+      - name: Sleep for 20 seconds # TODO: find a better way to wait until the database is ready
         run: sleep 20s
         shell: bash
       - name: check logs of docker-compose
@@ -40,18 +37,5 @@ jobs:
       - name: Verify MySQL connection from host with host 127.0.0.1
         run: |
           mysql --host 127.0.0.1 --port 3306 -uroot -prootpwd -e "SHOW DATABASES"
-      - name: Build with Ant
-        run: ant -noinput -buildfile build.xml build
-      - name: Tests with Ant
-        run: ant -noinput -buildfile build.xml test
-      - run: ls -la ./tmp
-      - name: Upload datasource test output file
-        uses: actions/upload-artifact@v2
-        with:
-          name: datasource-test.txt
-          path: ${{ github.workspace}}/tmp/datasource-test.txt
-      - name: Upload test output file
-        uses: actions/upload-artifact@v2
-        with:
-          name: jdbc-tests.txt
-          path: ${{ github.workspace }}/tmp/jdbc-tests.txt
+      - name: Run unit tests
+        run: ./gradlew test

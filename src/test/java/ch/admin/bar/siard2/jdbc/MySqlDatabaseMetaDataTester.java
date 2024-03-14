@@ -14,8 +14,7 @@ import ch.enterag.utils.base.*;
 import ch.enterag.utils.jdbc.*;
 import ch.enterag.sqlparser.identifier.*;
 
-@Ignore
-public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester 
+public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
 {
 	private static final ConnectionProperties _cp = new ConnectionProperties();
   private static final String _sDB_URL = MySqlDriver.getUrl(_cp.getHost() + ":" + _cp.getPort()+"/"+_cp.getCatalog(),true);

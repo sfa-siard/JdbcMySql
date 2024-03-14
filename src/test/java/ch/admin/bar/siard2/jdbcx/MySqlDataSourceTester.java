@@ -16,7 +16,6 @@ import org.junit.Test;
 import ch.admin.bar.siard2.jdbcx.MySqlDataSource;
 import ch.enterag.utils.base.ConnectionProperties;
 
-@Ignore
 public class MySqlDataSourceTester {
 	private static final ConnectionProperties _cp = new ConnectionProperties();
 	
