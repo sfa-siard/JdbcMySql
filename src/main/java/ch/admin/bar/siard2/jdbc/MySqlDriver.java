@@ -40,7 +40,7 @@ public class MySqlDriver extends BaseDriver implements Driver
     if (!sUrl.startsWith(sMYSQL_URL_PREFIX))
       sUrl = sMYSQL_URL_PREFIX+"//"+sDatabaseName;
     if (bNoSsl)
-      sUrl = sUrl+"?verifyServerCertificate=false&useSSL=false&requireSSL=false";
+      sUrl = sUrl+"?verifyServerCertificate=false&useSSL=false&requireSSL=false&allowPublicKeyRetrieval=true";
     return sUrl;
   } /* getUrl */
 
