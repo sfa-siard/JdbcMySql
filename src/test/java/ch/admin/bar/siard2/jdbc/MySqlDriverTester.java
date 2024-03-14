@@ -87,7 +87,7 @@ public class MySqlDriverTester {
 		int iMajorVersion = _driver.getMajorVersion();
 		int iMinorVersion = _driver.getMinorVersion();
 		String sVersion = String.valueOf(iMajorVersion) + "." + String.valueOf(iMinorVersion);
-		assertEquals("Wrong MySql version " + sVersion + " found!", "8.0", sVersion);
+		assertEquals("Wrong MySql version " + sVersion + " found!", "8.3", sVersion);
 	} /* testVersion */
 	
 	@Test
@@ -98,7 +98,7 @@ public class MySqlDriverTester {
 			for (DriverPropertyInfo propInfo : aPropInfo) {
 				System.out.println(propInfo.name + ": " + propInfo.value + " (" + propInfo.description + ")");
 			}
-			assertEquals("Unexpected driver properties!", 194, aPropInfo.length);
+			assertEquals("Unexpected driver properties!", 211, aPropInfo.length);
 		} catch (SQLException se) {
 			fail(se.getClass().getName() + ": " + se.getMessage());
 		}

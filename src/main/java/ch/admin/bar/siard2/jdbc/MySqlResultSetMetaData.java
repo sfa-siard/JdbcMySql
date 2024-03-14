@@ -13,6 +13,7 @@ package ch.admin.bar.siard2.jdbc;
 import java.math.*;
 import java.sql.*;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.*;
 import ch.enterag.utils.jdbc.*;
 
@@ -36,10 +37,12 @@ public class MySqlResultSetMetaData extends BaseResultSetMetaData implements Res
 		mapCLASS_MYSQL_TO_ISO.put(Long.class.getName(), Long.class);
 		mapCLASS_MYSQL_TO_ISO.put(Float.class.getName(), Float.class);
 		mapCLASS_MYSQL_TO_ISO.put(Double.class.getName(), Double.class);
-    mapCLASS_MYSQL_TO_ISO.put(BigDecimal.class.getName(), BigDecimal.class);
-    mapCLASS_MYSQL_TO_ISO.put(Date.class.getName(), Date.class);
-    mapCLASS_MYSQL_TO_ISO.put(Time.class.getName(), Time.class);
-    mapCLASS_MYSQL_TO_ISO.put(Timestamp.class.getName(), Timestamp.class);
+		mapCLASS_MYSQL_TO_ISO.put(BigDecimal.class.getName(), BigDecimal.class);
+		mapCLASS_MYSQL_TO_ISO.put(Date.class.getName(), Date.class);
+		mapCLASS_MYSQL_TO_ISO.put(Time.class.getName(), Time.class);
+		mapCLASS_MYSQL_TO_ISO.put(Timestamp.class.getName(), Timestamp.class);
+		// seems to be a breaking change when updating MySql Connector Version 8.0 to 8.3
+		mapCLASS_MYSQL_TO_ISO.put(LocalDateTime.class.getName(), Timestamp.class);
 	}
 
 	/* ------------------------------------------------------------------------ */
@@ -92,6 +95,15 @@ public class MySqlResultSetMetaData extends BaseResultSetMetaData implements Res
 				sTypeName.equals("GEOMETRYCOLLECTION")) {
 			cls = String.class;
 		}
+
+		if (cls == null) {
+			throw new IllegalStateException(String.format(
+					"No MySql to ISO mapping found for class name %s (column %d)",
+					sClassName,
+					column
+			));
+		}
+
 		return cls.getName();
 	} /* getColumnClassName */
 

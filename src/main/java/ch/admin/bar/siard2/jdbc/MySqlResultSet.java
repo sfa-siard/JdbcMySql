@@ -14,6 +14,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDateTime;
 
 import javax.xml.datatype.*;
 import javax.xml.parsers.*;
@@ -136,6 +137,9 @@ public class MySqlResultSet
 			  o = mapObject(o, Types.VARCHAR);
 		  else
 			  o = mapObject(o, iType);
+	  } else if (o instanceof LocalDateTime) {
+		  // seems to be a breaking change when updating MySql Connector Version 8.0 to 8.3
+		  return Timestamp.valueOf((LocalDateTime)o);
 	  } else
 		  o = mapObject(o, iType);
 	  return o;
