@@ -19,23 +19,27 @@ Run a MySQL 5 Database with:
 docker-compose up -d
 ```
 
-Run all tests:
+### Build application artifacts
+
+Run tests and build the package
 
 ```shell
-ant test
+./gradlew build
 ```
 
-Create a release
+## Versioning, tags and releases
+
+Versions and tags are managed with the Axion Release Plugin for Gradle (https://github.com/allegro/axion-release-plugin)
+
+Short overview:
 
 ```shell
-ant release
+./gradlew currentVersion # show the current version
+
+./gradlew release        # creates a new release adds a tag and pushes it to remote.
 ```
 
-
-More information about the build process can be found in
-[./doc/manual/developer/build.html](./doc/manual/developer/build.html).
-
-You may use an IDE of your choice for development (tested with intellij idea and eclipse)
+You may use an IDE of your choice for development (tested with intellij)
 
 ## Documentation
 
