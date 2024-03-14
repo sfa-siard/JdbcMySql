@@ -59,7 +59,7 @@ public class MySqlResultSetTester extends BaseResultSetTester
     listCdSimple.add(new TestColumnDefinition("CCHAR_5","CHAR(5)","wxyZ"));
     listCdSimple.add(new TestColumnDefinition("CVARCHAR_255","VARCHAR(255)",TestUtils.getString(92)));
     listCdSimple.add(new TestColumnDefinition("CCLOB_2M","CLOB(2M)",TestUtils.getString(1000000)));
-    listCdSimple.add(new TestColumnDefinition("CNCHAR_5","NCHAR(5)","Auää"));
+    listCdSimple.add(new TestColumnDefinition("CNCHAR_5","NCHAR(5)","Abcde"));
     listCdSimple.add(new TestColumnDefinition("CNVARCHAR_127","NCHAR VARYING(127)",TestUtils.getNString(53)));
     listCdSimple.add(new TestColumnDefinition("CNCLOB_1M","NCLOB(1M)",TestUtils.getNString(500000)));
     listCdSimple.add(new TestColumnDefinition("CXML","XML","<a>foöäpwkfèégopàèwerkgv fviodsjv jdsjd idsjidsjsiudojiou operkv &lt; and &amp; ifjeifj</a>"));
@@ -2129,11 +2129,10 @@ public class MySqlResultSetTester extends BaseResultSetTester
         clob.getSubString(1l, (int)clob.length()));
 
       tcd = findColumnDefinition(_listCdSimple,"CNCHAR_5");
-
       final String resultSetValue = getResultSet().getString(tcd.getName());
       assertEquals("Insert of "+tcd.getType()+" failed!",
               tcd.getValue(),
-              resultSetValue.substring(0,((String)tcd.getValue()).length()));
+              resultSetValue);
 
       tcd = findColumnDefinition(_listCdSimple,"CNVARCHAR_127");
       assertEquals("Insert of "+tcd.getType()+" failed!",
@@ -2539,13 +2538,13 @@ public class MySqlResultSetTester extends BaseResultSetTester
   public void testSetFetchDirection()
   {
     enter();
-    try 
-    {
-      openResultSet(_sSqlQuerySimple,ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_READ_ONLY);
-      getResultSet().setFetchDirection(ResultSet.FETCH_UNKNOWN);
-    	}
-    catch(SQLFeatureNotSupportedException sfnse) { printExceptionMessage(sfnse); }
-    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+      try {
+          openResultSet(_sSqlQuerySimple,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+          getResultSet().setFetchDirection(ResultSet.FETCH_FORWARD);
+      } catch (SQLException e) {
+          throw new RuntimeException(e);
+      }
+
   } /* testSetFetchDirection */
   
   @Override
