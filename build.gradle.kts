@@ -9,6 +9,7 @@
 plugins {
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
+    id("pl.allegro.tech.build.axion-release") version "1.14.3"
 }
 
 java {
@@ -16,7 +17,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-version = "2.2.2"
+version = scmVersion.version
 
 repositories {
     mavenCentral()
