@@ -30,6 +30,7 @@ public class MySqlMetaColumns extends MySqlResultSet
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.BIGINTU, PreType.BIGINT);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.BINARY, PreType.BINARY);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.BIT, PreType.BOOLEAN);
+		mapNAME_MYSQL_TO_ISO.put(MySqlType.MULTIBIT, PreType.BINARY);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.BLOB, PreType.BLOB);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.BOOL, PreType.BOOLEAN);
 		mapNAME_MYSQL_TO_ISO.put(MySqlType.BOOLEAN, PreType.BOOLEAN);
@@ -100,17 +101,36 @@ public class MySqlMetaColumns extends MySqlResultSet
 		_rsUnwrapped = unwrap(ResultSet.class);
 	} /* constructor */
 
-	/* ------------------------------------------------------------------------ */
+
 	/** Implements the type translation between MySql and ISO SQL
 	 * @param sTypeName original type name.
 	 * @return data type from java.sql.Types.
 	 */
-	static int getDataType(String sTypeName)
-	{
-		MySqlType mst = MySqlType.getByTypeName(sTypeName);
+	static int getDataType(String sTypeName) {
+		if (sTypeName == null) {
+			return Types.OTHER;
+		}
+
+		String sTypeNameLower = sTypeName.toLowerCase();
+		String sBaseTypeName = sTypeNameLower;
+		int iParenIndex = sBaseTypeName.indexOf('(');
+		if (iParenIndex > 0) {
+			sBaseTypeName = sBaseTypeName.substring(0, iParenIndex);
+		}
+
+		// For BIT types, pass the full type name to getByTypeName to handle length
+		if (sBaseTypeName.equals("bit")) {
+			MySqlType mst = MySqlType.getByTypeName(sTypeNameLower);
+			PreType pt = mapNAME_MYSQL_TO_ISO.get(mst);
+			return pt.getSqlType();
+		}
+
+		// For other types, use the base type name
+		MySqlType mst = MySqlType.getByTypeName(sBaseTypeName);
+
 		PreType pt = mapNAME_MYSQL_TO_ISO.get(mst);
 		return pt.getSqlType();
-	} /* getDataType */
+	}
 
 	/*------------------------------------------------------------------*/
 	/** implements length translation.

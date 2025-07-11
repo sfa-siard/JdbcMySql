@@ -489,7 +489,7 @@ public class MySqlDatabaseMetaData
 				"        WHEN P.PARAMETER_MODE = NULL THEN 5 \r\n" +
 				"	ELSE 0 END AS COLUMN_TYPE, \r\n" +
 				"    -1 AS DATA_TYPE, \r\n" +
-				"    P.DATA_TYPE AS TYPE_NAME, \r\n" +
+				"    P.DTD_IDENTIFIER AS TYPE_NAME, \r\n" +
 				"    P.NUMERIC_PRECISION AS 'PRECISION', \r\n" +
 				"    P.CHARACTER_MAXIMUM_LENGTH AS LENGTH, \r\n" +
 				"    P.NUMERIC_SCALE AS SCALE, \r\n" +
@@ -558,7 +558,7 @@ public class MySqlDatabaseMetaData
 				"        WHEN P.PARAMETER_MODE = NULL THEN 5 \r\n" +
 				"	ELSE 0 END AS COLUMN_TYPE, \r\n" +
 				"    -1 AS DATA_TYPE, \r\n" +
-				"    P.DATA_TYPE AS TYPE_NAME, \r\n" +
+				"    P.DTD_IDENTIFIER AS TYPE_NAME, \r\n" +
 				"    P.NUMERIC_PRECISION AS 'PRECISION', \r\n" +
 				"    P.CHARACTER_MAXIMUM_LENGTH AS LENGTH, \r\n" +
 				"    P.NUMERIC_SCALE AS SCALE, \r\n" +
@@ -800,17 +800,14 @@ public class MySqlDatabaseMetaData
       "  TABLE_NAME AS TABLE_NAME,\r\n"+
       "  COLUMN_NAME AS COLUMN_NAME,\r\n"+
       "  0 as DATA_TYPE,\r\n"+
-      "  CASE\r\n"+
-      "    WHEN COLUMN_TYPE LIKE '%unsigned%' AND DATA_TYPE <> 'set' THEN CONCAT(DATA_TYPE, ' unsigned')\r\n"+
-      "    ELSE DATA_TYPE\r\n"+
-      "  END AS TYPE_NAME,\r\n"+
+      "  COLUMN_TYPE AS TYPE_NAME,\r\n"+
       "  CASE\r\n"+
       "    WHEN NUMERIC_PRECISION IS NOT NULL THEN NUMERIC_PRECISION\r\n"+
       "    WHEN CHARACTER_MAXIMUM_LENGTH IS NOT NULL THEN CHARACTER_MAXIMUM_LENGTH\r\n"+
-      "    WHEN DATA_TYPE = 'date' THEN 10\r\n"+
-      "    WHEN DATA_TYPE = 'time' THEN 8\r\n"+
-      "    WHEN DATA_TYPE = 'datetime' OR DATA_TYPE = 'timestamp' THEN 19\r\n"+
-      "    WHEN DATA_TYPE = 'year' THEN 4\r\n"+
+      "    WHEN COLUMN_TYPE = 'date' THEN 10\r\n"+
+      "    WHEN COLUMN_TYPE = 'time' THEN 8\r\n"+
+      "    WHEN COLUMN_TYPE = 'datetime' OR COLUMN_TYPE = 'timestamp' THEN 19\r\n"+
+      "    WHEN COLUMN_TYPE = 'year' THEN 4\r\n"+
       "    ELSE NULL\r\n"+
       "  END AS COLUMN_SIZE,\r\n"+
       "  NULL AS BUFFER_LENGTH,\r\n"+

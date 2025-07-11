@@ -6,6 +6,7 @@ package ch.admin.bar.siard2.mysql;
  */
 public enum MySqlType {
 	BIT("bit"),
+	MULTIBIT("bit_multi"),
 	TINYINT("tinyint"),
 	TINYINTU("tinyint unsigned"),
 	BOOL("bool"),
@@ -75,6 +76,21 @@ public enum MySqlType {
 		if(_sTypeName.equals("geomcollection")) {
 			return GEOMETRYCOLLECTION;
 		}
+		
+		// Special handling for BIT types with length > 1
+		if(_sTypeName.startsWith("bit(")) {
+			String sLength = _sTypeName.substring(4, _sTypeName.indexOf(')'));
+			try {
+				int iLength = Integer.parseInt(sLength);
+				if (iLength > 1) {
+					return MULTIBIT;
+				}
+				return BIT;
+			} catch (NumberFormatException e) {
+				// Fall through to normal handling
+			}
+		}
+		
 		MySqlType result = null;
 		for(int i=0;i<MySqlType.values().length;i++) {
 			MySqlType t = MySqlType.values()[i];
