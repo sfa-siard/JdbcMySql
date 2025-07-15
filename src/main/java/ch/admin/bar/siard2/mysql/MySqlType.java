@@ -100,7 +100,7 @@ public enum MySqlType {
 			}
 		}
 		return result;
-	} /* getByTypeName */
+	}
 	
 	/**
 	 * Gets the type name
