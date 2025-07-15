@@ -79,10 +79,10 @@ public enum MySqlType {
 		
 		// Special handling for BIT types with length > 1
 		if(_sTypeName.startsWith("bit(")) {
-			String sLength = _sTypeName.substring(4, _sTypeName.indexOf(')'));
+			String sBitLength = _sTypeName.substring(4, _sTypeName.indexOf(')'));
 			try {
-				int iLength = Integer.parseInt(sLength);
-				if (iLength > 1) {
+				int iBitLength = Integer.parseInt(sBitLength);
+				if (iBitLength > 1) {
 					return MULTIBIT;
 				}
 				return BIT;
