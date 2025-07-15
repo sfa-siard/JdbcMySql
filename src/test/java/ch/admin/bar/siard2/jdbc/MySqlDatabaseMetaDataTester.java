@@ -209,7 +209,7 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
           if (!sType.startsWith("INTERVAL"))
           {
             // parse type
-            Matcher matcher = _patTYPE.matcher(sType);
+            Matcher matcher = _patTYPE.matcher(sBaseTypeName);
             if (matcher.matches())
             {
               /* compare column size with explicit precision */
