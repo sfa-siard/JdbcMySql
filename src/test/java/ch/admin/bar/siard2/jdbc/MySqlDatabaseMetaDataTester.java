@@ -138,56 +138,70 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
           String sTypeName = rs.getString("TYPE_NAME");
           long lColumnSize = rs.getLong("COLUMN_SIZE");
           // int iDecimalDigits = rs.getInt("DECIMAL_DIGITS");
-          switch(sTypeName)
+          
+          // Extract base type name
+          String sBaseTypeName = sTypeName.toLowerCase();
+          int iParenIndex = sBaseTypeName.indexOf('(');
+          if (iParenIndex > 0) {
+            sBaseTypeName = sBaseTypeName.substring(0, iParenIndex);
+          }
+
+          switch(sBaseTypeName)
           {
-            case "char": assertEquals("Invalid char mapping!",Types.CHAR,iDataType); break;
-            case "varchar": assertEquals("Invalid varchar mapping!",Types.VARCHAR,iDataType); break;
-            case "text": assertEquals("Invalid text mapping!",Types.CLOB,iDataType); break;
-            case "tinytext": assertEquals("Invalid tinytext mapping!",Types.VARCHAR,iDataType); break;
-            case "mediumtext": assertEquals("Invalid mediumtext mapping!",Types.CLOB,iDataType); break;
-            case "longtext": assertEquals("Invalid longtext mapping!",Types.CLOB,iDataType); break;
-            case "binary": assertEquals("Invalid binary mapping!",Types.BINARY,iDataType); break;
-            case "varbinary": assertEquals("Invalid varbinary mapping!",Types.VARBINARY,iDataType); break;
-            case "blob": assertEquals("Invalid blob mapping!",Types.BLOB,iDataType); break;
-            case "tinyblob": assertEquals("Invalid tinyblob mapping!",Types.VARBINARY,iDataType); break;
-            case "mediumblob": assertEquals("Invalid mediumblob mapping!",Types.BLOB,iDataType); break;
-            case "longblob": assertEquals("Invalid longblob mapping!",Types.BLOB,iDataType); break;
-            case "int": assertEquals("Invalid int mapping!",Types.INTEGER,iDataType); break;
-            case "int unsigned": assertEquals("Invalid int unsigned mapping!",Types.BIGINT,iDataType); break;
-            case "tinyint": assertEquals("Invalid tinyint mapping!",Types.SMALLINT,iDataType); break;
-            case "tinyint unsigned": assertEquals("Invalid tinyint unsigned mapping!",Types.SMALLINT,iDataType); break;
-            case "smallint": assertEquals("Invalid smallint mapping!",Types.SMALLINT,iDataType); break;
-            case "smallint unsigned": assertEquals("Invalid smallint unsigned mapping!",Types.INTEGER,iDataType); break;
-            case "mediumint": assertEquals("Invalid mediumint mapping!",Types.INTEGER,iDataType); break;
-            case "mediumint unsigned": assertEquals("Invalid mediumint unsigned mapping!",Types.BIGINT,iDataType); break;
-            case "bigint": assertEquals("Invalid bigint mapping!",Types.BIGINT,iDataType); break;
-            case "bigint unsigned": assertEquals("Invalid bigint unsigned mapping!",Types.BIGINT,iDataType); break;
-            case "decimal": assertEquals("Invalid decimal mapping!",Types.DECIMAL,iDataType); break;
-            case "numeric": assertEquals("Invalid numeric mapping!",Types.NUMERIC,iDataType); break;
-            case "real": assertEquals("Invalid real mapping!",Types.REAL,iDataType); break;
-            case "float": assertEquals("Invalid float mapping!",Types.FLOAT,iDataType); break;
-            case "double": assertEquals("Invalid double mapping!",Types.DOUBLE,iDataType); break;
-            case "bit": assertEquals("Invalid bit mapping!",Types.BOOLEAN,iDataType); break;
-            case "bool": assertEquals("Invalid bool mapping!",Types.BOOLEAN,iDataType); break;
-            case "date": assertEquals("Invalid date mapping!",Types.DATE,iDataType); break;
-            case "time": assertEquals("Invalid time mapping!",Types.TIME,iDataType); break;
-            case "timestamp": assertEquals("Invalid timestamp mapping!",Types.TIMESTAMP,iDataType); break;
-            case "datetime": assertEquals("Invalid datetime mapping!",Types.TIMESTAMP,iDataType); break;
-            case "year": assertEquals("Invalid year mapping!",Types.SMALLINT,iDataType); break;
-            case "geometry": assertEquals("Invalid geometry mapping!",Types.CLOB,iDataType); break;
-            case "point": assertEquals("Invalid point mapping!",Types.CLOB,iDataType); break;
-            case "linestring": assertEquals("Invalid linestring mapping!",Types.CLOB,iDataType); break;
-            case "polygon": assertEquals("Invalid polygon mapping!",Types.CLOB,iDataType); break;
-            case "multipoint": assertEquals("Invalid multipoint mapping!",Types.CLOB,iDataType); break;
-            case "multilinestring": assertEquals("Invalid multilinestring mapping!",Types.CLOB,iDataType); break;
-            case "multipolygon": assertEquals("Invalid multipolygon mapping!",Types.CLOB,iDataType); break;
-            case "geometrycollection": assertEquals("Invalid geometrycollection mapping!",Types.CLOB,iDataType); break;
+            case "char": assertEquals("Invalid char mapping!", Types.CHAR, iDataType); break;
+            case "varchar": assertEquals("Invalid varchar mapping!", Types.VARCHAR, iDataType); break;
+            case "text": assertEquals("Invalid text mapping!", Types.CLOB, iDataType); break;
+            case "tinytext": assertEquals("Invalid tinytext mapping!", Types.VARCHAR, iDataType); break;
+            case "mediumtext": assertEquals("Invalid mediumtext mapping!", Types.CLOB, iDataType); break;
+            case "longtext": assertEquals("Invalid longtext mapping!", Types.CLOB, iDataType); break;
+            case "binary": assertEquals("Invalid binary mapping!", Types.BINARY, iDataType); break;
+            case "varbinary": assertEquals("Invalid varbinary mapping!", Types.VARBINARY, iDataType); break;
+            case "blob": assertEquals("Invalid blob mapping!", Types.BLOB, iDataType); break;
+            case "tinyblob": assertEquals("Invalid tinyblob mapping!", Types.VARBINARY, iDataType); break;
+            case "mediumblob": assertEquals("Invalid mediumblob mapping!", Types.BLOB, iDataType); break;
+            case "longblob": assertEquals("Invalid longblob mapping!", Types.BLOB, iDataType); break;
+            case "int": assertEquals("Invalid int mapping!", Types.INTEGER, iDataType); break;
+            case "int unsigned": assertEquals("Invalid int unsigned mapping!", Types.BIGINT, iDataType); break;
+            case "tinyint": assertEquals("Invalid tinyint mapping!", Types.SMALLINT, iDataType); break;
+            case "tinyint unsigned": assertEquals("Invalid tinyint unsigned mapping!", Types.SMALLINT, iDataType); break;
+            case "smallint": assertEquals("Invalid smallint mapping!", Types.SMALLINT, iDataType); break;
+            case "smallint unsigned": assertEquals("Invalid smallint unsigned mapping!", Types.INTEGER, iDataType); break;
+            case "mediumint": assertEquals("Invalid mediumint mapping!", Types.INTEGER, iDataType); break;
+            case "mediumint unsigned": assertEquals("Invalid mediumint unsigned mapping!", Types.BIGINT, iDataType); break;
+            case "bigint": assertEquals("Invalid bigint mapping!", Types.BIGINT, iDataType); break;
+            case "bigint unsigned": assertEquals("Invalid bigint unsigned mapping!", Types.BIGINT, iDataType); break;
+            case "decimal": assertEquals("Invalid decimal mapping!", Types.DECIMAL, iDataType); break;
+            case "numeric": assertEquals("Invalid numeric mapping!", Types.DECIMAL, iDataType); break;
+            case "real": assertEquals("Invalid real mapping!", Types.REAL, iDataType); break;
+            case "float": assertEquals("Invalid float mapping!", Types.FLOAT, iDataType); break;
+            case "double": assertEquals("Invalid double mapping!", Types.DOUBLE, iDataType); break;
+            case "bit":
+              if (sTypeName.equalsIgnoreCase("bit(1)")) {
+                assertEquals("Invalid bit mapping!", Types.BOOLEAN, iDataType);
+              } else {
+                assertEquals("Invalid multibit mapping!", Types.BINARY, iDataType);
+              }
+              break;
+            case "bool": assertEquals("Invalid bool mapping!", Types.BOOLEAN, iDataType); break;
+            case "date": assertEquals("Invalid date mapping!", Types.DATE, iDataType); break;
+            case "time": assertEquals("Invalid time mapping!", Types.TIME, iDataType); break;
+            case "timestamp": assertEquals("Invalid timestamp mapping!", Types.TIMESTAMP, iDataType); break;
+            case "datetime": assertEquals("Invalid datetime mapping!", Types.TIMESTAMP, iDataType); break;
+            case "year": assertEquals("Invalid year mapping!", Types.SMALLINT, iDataType); break;
+            case "geometry": assertEquals("Invalid geometry mapping!", Types.CLOB, iDataType); break;
+            case "point": assertEquals("Invalid point mapping!", Types.CLOB, iDataType); break;
+            case "linestring": assertEquals("Invalid linestring mapping!", Types.CLOB, iDataType); break;
+            case "polygon": assertEquals("Invalid polygon mapping!", Types.CLOB, iDataType); break;
+            case "multipoint": assertEquals("Invalid multipoint mapping!", Types.CLOB, iDataType); break;
+            case "multilinestring": assertEquals("Invalid multilinestring mapping!", Types.CLOB, iDataType); break;
+            case "multipolygon": assertEquals("Invalid multipolygon mapping!", Types.CLOB, iDataType); break;
+            case "geometrycollection": assertEquals("Invalid geometrycollection mapping!", Types.CLOB, iDataType); break;
             // new with mysql 8.0
-            case "geomcollection": assertEquals("Invalid geometrycollection mapping!",Types.CLOB,iDataType); break;
-            case "enum": assertEquals("Invalid enum mapping!",Types.VARCHAR,iDataType); break;
-            case "set": assertEquals("Invalid set mapping!",Types.VARCHAR,iDataType); break;
+            case "geomcollection": assertEquals("Invalid geometrycollection mapping!", Types.CLOB, iDataType); break;
+            case "enum": assertEquals("Invalid enum mapping!", Types.VARCHAR, iDataType); break;
+            case "set": assertEquals("Invalid set mapping!", Types.VARCHAR, iDataType); break;
             default:
-              fail("Invalid type "+sTypeName+"!");
+              fail("Invalid type " + sTypeName + "!");
               break;
           }
           TestColumnDefinition tcd = mapCd.get(sColumnName);
@@ -195,7 +209,7 @@ public class MySqlDatabaseMetaDataTester extends BaseDatabaseMetaDataTester
           if (!sType.startsWith("INTERVAL"))
           {
             // parse type
-            Matcher matcher = _patTYPE.matcher(sType);
+            Matcher matcher = _patTYPE.matcher(sBaseTypeName);
             if (matcher.matches())
             {
               /* compare column size with explicit precision */
