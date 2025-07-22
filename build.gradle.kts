@@ -17,6 +17,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+group = "ch.admin.bar"
 version = scmVersion.version
 
 repositories {
