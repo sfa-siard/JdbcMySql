@@ -46,7 +46,7 @@ jobs:
       - name: Execute Gradle build
         run: ./gradlew build
       - name: upload artefact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.NAME_TAG }}
           path: build/libs/

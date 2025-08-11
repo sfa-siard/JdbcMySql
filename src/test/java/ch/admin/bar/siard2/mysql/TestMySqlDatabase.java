@@ -155,7 +155,6 @@ public class TestMySqlDatabase
     sb.append(SqlLiterals.formatStringLiteral("%"));
     Statement stmt = conn.createStatement();
     stmt.unwrap(Statement.class).executeUpdate(sb.toString());
-    conn.commit();
   } /* grantSchemaUser */
   
   public static void revokeSchemaUser(Connection conn, String sSchema, 
