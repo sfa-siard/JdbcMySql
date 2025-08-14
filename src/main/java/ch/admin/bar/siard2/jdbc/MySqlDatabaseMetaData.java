@@ -844,7 +844,7 @@ public class MySqlDatabaseMetaData
 		if(schemaPattern != null)
 			whereClauseComponents.add("TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
 		if(tableNamePattern != null)
-			whereClauseComponents.add("TABLE_NAME LIKE " + SqlLiterals.formatStringLiteral(tableNamePattern));
+			whereClauseComponents.add("TABLE_NAME LIKE " + SqlLiterals.formatStringLiteral(tableNamePattern) + " ESCAPE '\\'");
 		if (columnNamePattern != null)
 		  whereClauseComponents.add("COLUMN_NAME LIKE "+SqlLiterals.formatStringLiteral(columnNamePattern));
 
@@ -866,7 +866,7 @@ public class MySqlDatabaseMetaData
 		sb.append("ORDER BY TABLE_CAT, TABLE_SCHEM, TABLE_NAME, ORDINAL_POSITION");
 		
 		Statement stmt = this.getConnection().createStatement();
-		return new MySqlMetaColumns(stmt.unwrap(Statement.class).executeQuery(sb.toString()), 5, 6, 7, 7, _conn);
+        return new MySqlMetaColumns(stmt.unwrap(Statement.class).executeQuery(sb.toString()), 5, 6, 7, 7, _conn);
 	} /* getColumns */
 
 	/* ------------------------------------------------------------------------ */
