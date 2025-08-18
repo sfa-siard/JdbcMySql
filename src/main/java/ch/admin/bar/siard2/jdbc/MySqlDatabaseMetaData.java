@@ -24,7 +24,7 @@ public class MySqlDatabaseMetaData
   extends BaseDatabaseMetaData 
   implements DatabaseMetaData 
 {
-  private MySqlConnection _conn = null;
+  private MySqlConnection _conn;
 	/**
 	 * Constructor 
 	 * @param dmdWrapped database meta data to wrapped
@@ -38,8 +38,7 @@ public class MySqlDatabaseMetaData
   /*------------------------------------------------------------------*/
   /** {@inheritDoc} */
   @Override
-  public Connection getConnection() throws SQLException
-  {
+  public Connection getConnection() {
     return _conn;
   } /* getConnection */
   
@@ -62,7 +61,7 @@ public class MySqlDatabaseMetaData
 	@Override
 	public ResultSet getVersionColumns(String catalog, String schema, String table) throws SQLException 
 	{
-	  ResultSet rs = null;
+	  ResultSet rs;
 		if (catalog == null)
 		  rs = super.getVersionColumns(schema, catalog, table);
 		else
@@ -126,7 +125,7 @@ public class MySqlDatabaseMetaData
 				"FROM INFORMATION_SCHEMA.STATISTICS\r\n");
 		
 		// where clause criteria
-		ArrayList<String> whereClauseComponents = new ArrayList<String>();
+		ArrayList<String> whereClauseComponents = new ArrayList<>();
 		if(schema != null) {
 			whereClauseComponents.add("TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schema));
 		}
@@ -181,7 +180,7 @@ public class MySqlDatabaseMetaData
 				"FROM INFORMATION_SCHEMA.TABLE_PRIVILEGES\r\n");
 		
 		// where clause criteria
-		ArrayList<String> whereClauseComponents = new ArrayList<String>();
+		ArrayList<String> whereClauseComponents = new ArrayList<>();
 		if(schemaPattern != null) {
 			whereClauseComponents.add("TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
 		}
@@ -221,7 +220,7 @@ public class MySqlDatabaseMetaData
     sbCondition.append(getNameCondition("TABLE_NAME",table));
     if (sbCondition.length() > 0)
     {
-      sb.append(sbCondition.toString());
+      sb.append(sbCondition);
       sbCondition.append("\r\n");
     }
     // order according to the JDBC specification
@@ -291,22 +290,22 @@ public class MySqlDatabaseMetaData
       "  KCU.COLUMN_NAME AS FKCOLUMN_NAME,\r\n"+
       "  KCU.ORDINAL_POSITION AS KEY_SEQ,\r\n"+
       "  CASE RC.UPDATE_RULE\r\n" +
-      "    WHEN 'NO ACTION' THEN "+String.valueOf(DatabaseMetaData.importedKeyNoAction)+"\r\n" +
-      "    WHEN 'CASCADE' THEN "+String.valueOf(DatabaseMetaData.importedKeyCascade)+"\r\n" +
-      "    WHEN 'SET NULL' THEN "+String.valueOf(DatabaseMetaData.importedKeySetNull)+"\r\n" +
-      "    WHEN 'SET DEFAULT' THEN "+String.valueOf(DatabaseMetaData.importedKeySetDefault)+"\r\n" +
-      "    WHEN 'RESTRICT' THEN "+String.valueOf(DatabaseMetaData.importedKeyRestrict)+"\r\n" +
+      "    WHEN 'NO ACTION' THEN "+ DatabaseMetaData.importedKeyNoAction +"\r\n" +
+      "    WHEN 'CASCADE' THEN "+ DatabaseMetaData.importedKeyCascade +"\r\n" +
+      "    WHEN 'SET NULL' THEN "+ DatabaseMetaData.importedKeySetNull +"\r\n" +
+      "    WHEN 'SET DEFAULT' THEN "+ DatabaseMetaData.importedKeySetDefault +"\r\n" +
+      "    WHEN 'RESTRICT' THEN "+ DatabaseMetaData.importedKeyRestrict +"\r\n" +
       "  END AS UPDATE_RULE,\r\n" +
       "  CASE RC.DELETE_RULE\r\n" +
-      "    WHEN 'NO ACTION' THEN "+String.valueOf(DatabaseMetaData.importedKeyNoAction)+"\r\n" +
-      "    WHEN 'CASCADE' THEN "+String.valueOf(DatabaseMetaData.importedKeyCascade)+"\r\n" +
-      "    WHEN 'SET NULL' THEN "+String.valueOf(DatabaseMetaData.importedKeySetNull)+"\r\n" +
-      "    WHEN 'SET DEFAULT' THEN "+String.valueOf(DatabaseMetaData.importedKeySetDefault)+"\r\n" +
-      "    WHEN 'RESTRICT' THEN "+String.valueOf(DatabaseMetaData.importedKeyRestrict)+"\r\n" +
+      "    WHEN 'NO ACTION' THEN "+ DatabaseMetaData.importedKeyNoAction +"\r\n" +
+      "    WHEN 'CASCADE' THEN "+ DatabaseMetaData.importedKeyCascade +"\r\n" +
+      "    WHEN 'SET NULL' THEN "+ DatabaseMetaData.importedKeySetNull +"\r\n" +
+      "    WHEN 'SET DEFAULT' THEN "+ DatabaseMetaData.importedKeySetDefault +"\r\n" +
+      "    WHEN 'RESTRICT' THEN "+ DatabaseMetaData.importedKeyRestrict +"\r\n" +
       "  END AS DELETE_RULE,\r\n" +
       "  TCFK.CONSTRAINT_NAME AS FK_NAME,\r\n"+
       "  TCPK.CONSTRAINT_NAME AS PK_NAME,\r\n"+
-      "  "+String.valueOf(DatabaseMetaData.importedKeyNotDeferrable)+" AS DEFERRABILITY\r\n" +
+      "  "+ DatabaseMetaData.importedKeyNotDeferrable +" AS DEFERRABILITY\r\n" +
       "FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS RC\r\n"+
       "  INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS TCFK\r\n"+
       "    ON (RC.CONSTRAINT_SCHEMA = TCFK.CONSTRAINT_SCHEMA AND\r\n"+
@@ -323,22 +322,22 @@ public class MySqlDatabaseMetaData
     if (parentSchema != null)
     {
       if (sbCondition.length() > 0) sbCondition.append(" AND ");
-      sbCondition.append("LOWER(TCPK.TABLE_SCHEMA) = "+SqlLiterals.formatStringLiteral(parentSchema.toLowerCase()));
+      sbCondition.append("LOWER(TCPK.TABLE_SCHEMA) = ").append(SqlLiterals.formatStringLiteral(parentSchema.toLowerCase()));
     }
     if (parentTable != null)
     {
       if (sbCondition.length() > 0) sbCondition.append(" AND ");
-      sbCondition.append("LOWER(TCPK.TABLE_NAME) LIKE "+SqlLiterals.formatStringLiteral(parentTable.toLowerCase()));
+      sbCondition.append("LOWER(TCPK.TABLE_NAME) LIKE ").append(SqlLiterals.formatStringLiteral(parentTable.toLowerCase()));
     }
     if (foreignSchema != null)
     {
       if (sbCondition.length() > 0) sbCondition.append(" AND ");
-      sbCondition.append("LOWER(TCFK.TABLE_SCHEMA) = "+SqlLiterals.formatStringLiteral(foreignSchema.toLowerCase()));
+      sbCondition.append("LOWER(TCFK.TABLE_SCHEMA) = ").append(SqlLiterals.formatStringLiteral(foreignSchema.toLowerCase()));
     }
     if (foreignTable != null)
     {
       if (sbCondition.length() > 0) sbCondition.append(" AND ");
-      sbCondition.append("LOWER(TCFK.TABLE_NAME) LIKE "+SqlLiterals.formatStringLiteral(foreignTable.toLowerCase()));
+      sbCondition.append("LOWER(TCFK.TABLE_NAME) LIKE ").append(SqlLiterals.formatStringLiteral(foreignTable.toLowerCase()));
     }
     if (sbCondition.length() > 0)
       sSql = sSql + "WHERE "+sbCondition+"\r\n"+
@@ -368,22 +367,22 @@ public class MySqlDatabaseMetaData
       "  KCU.COLUMN_NAME AS FKCOLUMN_NAME,\r\n" +
       "  CASE WHEN KCU.POSITION_IN_UNIQUE_CONSTRAINT IS NULL THEN KCU.ORDINAL_POSITION ELSE KCU.POSITION_IN_UNIQUE_CONSTRAINT END AS KEY_SEQ,\r\n" +
       "  CASE RC.UPDATE_RULE\r\n" +
-      "      WHEN 'NO ACTION' THEN "+String.valueOf(DatabaseMetaData.importedKeyNoAction)+"\r\n" +
-      "      WHEN 'CASCADE' THEN "+String.valueOf(DatabaseMetaData.importedKeyCascade)+"\r\n" +
-      "      WHEN 'SET NULL' THEN "+String.valueOf(DatabaseMetaData.importedKeySetNull)+"\r\n" +
-      "      WHEN 'SET DEFAULT' THEN "+String.valueOf(DatabaseMetaData.importedKeySetDefault)+"\r\n" +
-      "      WHEN 'RESTRICT' THEN "+String.valueOf(DatabaseMetaData.importedKeyRestrict)+"\r\n" +
+      "      WHEN 'NO ACTION' THEN "+ DatabaseMetaData.importedKeyNoAction +"\r\n" +
+      "      WHEN 'CASCADE' THEN "+ DatabaseMetaData.importedKeyCascade +"\r\n" +
+      "      WHEN 'SET NULL' THEN "+ DatabaseMetaData.importedKeySetNull +"\r\n" +
+      "      WHEN 'SET DEFAULT' THEN "+ DatabaseMetaData.importedKeySetDefault +"\r\n" +
+      "      WHEN 'RESTRICT' THEN "+ DatabaseMetaData.importedKeyRestrict +"\r\n" +
       "    END AS UPDATE_RULE,\r\n" +
       "  CASE RC.DELETE_RULE\r\n" +
-      "      WHEN 'NO ACTION' THEN "+String.valueOf(DatabaseMetaData.importedKeyNoAction)+"\r\n" +
-      "      WHEN 'CASCADE' THEN "+String.valueOf(DatabaseMetaData.importedKeyCascade)+"\r\n" +
-      "      WHEN 'SET NULL' THEN "+String.valueOf(DatabaseMetaData.importedKeySetNull)+"\r\n" +
-      "      WHEN 'SET DEFAULT' THEN "+String.valueOf(DatabaseMetaData.importedKeySetDefault)+"\r\n" +
-      "      WHEN 'RESTRICT' THEN "+String.valueOf(DatabaseMetaData.importedKeyRestrict)+"\r\n" +
+      "      WHEN 'NO ACTION' THEN "+ DatabaseMetaData.importedKeyNoAction +"\r\n" +
+      "      WHEN 'CASCADE' THEN "+ DatabaseMetaData.importedKeyCascade +"\r\n" +
+      "      WHEN 'SET NULL' THEN "+ DatabaseMetaData.importedKeySetNull +"\r\n" +
+      "      WHEN 'SET DEFAULT' THEN "+ DatabaseMetaData.importedKeySetDefault +"\r\n" +
+      "      WHEN 'RESTRICT' THEN "+ DatabaseMetaData.importedKeyRestrict +"\r\n" +
       "    END AS DELETE_RULE,\r\n" +
       "  KCU.CONSTRAINT_NAME AS FK_NAME,\r\n" +
       "  RC.UNIQUE_CONSTRAINT_NAME AS PK_NAME,\r\n" +
-      "  "+String.valueOf(DatabaseMetaData.importedKeyNotDeferrable)+" AS DEFERRABILITY\r\n" +
+      "  "+ DatabaseMetaData.importedKeyNotDeferrable +" AS DEFERRABILITY\r\n" +
       "FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE KCU\r\n" +
       " INNER JOIN INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS RC\r\n"+
       " ON(KCU.CONSTRAINT_NAME = RC.CONSTRAINT_NAME\r\n"+
@@ -395,7 +394,7 @@ public class MySqlDatabaseMetaData
     sbCondition.append(getNameCondition("KCU.TABLE_NAME",table));
     if (sbCondition.length() > 0)
     {
-      sb.append(sbCondition.toString());
+      sb.append(sbCondition);
       sbCondition.append("\r\n");
     }
     // order according to the JDBC specification
@@ -424,22 +423,22 @@ public class MySqlDatabaseMetaData
       "  KCU.COLUMN_NAME AS FKCOLUMN_NAME,\r\n" +
       "  CASE WHEN KCU.POSITION_IN_UNIQUE_CONSTRAINT IS NULL THEN KCU.ORDINAL_POSITION ELSE KCU.POSITION_IN_UNIQUE_CONSTRAINT END AS KEY_SEQ,\r\n" +
       "  CASE RC.UPDATE_RULE\r\n" +
-      "      WHEN 'NO ACTION' THEN "+String.valueOf(DatabaseMetaData.importedKeyNoAction)+"\r\n" +
-      "      WHEN 'CASCADE' THEN "+String.valueOf(DatabaseMetaData.importedKeyCascade)+"\r\n" +
-      "      WHEN 'SET NULL' THEN "+String.valueOf(DatabaseMetaData.importedKeySetNull)+"\r\n" +
-      "      WHEN 'SET DEFAULT' THEN "+String.valueOf(DatabaseMetaData.importedKeySetDefault)+"\r\n" +
-      "      WHEN 'RESTRICT' THEN "+String.valueOf(DatabaseMetaData.importedKeyRestrict)+"\r\n" +
+      "      WHEN 'NO ACTION' THEN "+ DatabaseMetaData.importedKeyNoAction +"\r\n" +
+      "      WHEN 'CASCADE' THEN "+ DatabaseMetaData.importedKeyCascade +"\r\n" +
+      "      WHEN 'SET NULL' THEN "+ DatabaseMetaData.importedKeySetNull +"\r\n" +
+      "      WHEN 'SET DEFAULT' THEN "+ DatabaseMetaData.importedKeySetDefault +"\r\n" +
+      "      WHEN 'RESTRICT' THEN "+ DatabaseMetaData.importedKeyRestrict +"\r\n" +
       "    END AS UPDATE_RULE,\r\n" +
       "  CASE RC.DELETE_RULE\r\n" +
-      "      WHEN 'NO ACTION' THEN "+String.valueOf(DatabaseMetaData.importedKeyNoAction)+"\r\n" +
-      "      WHEN 'CASCADE' THEN "+String.valueOf(DatabaseMetaData.importedKeyCascade)+"\r\n" +
-      "      WHEN 'SET NULL' THEN "+String.valueOf(DatabaseMetaData.importedKeySetNull)+"\r\n" +
-      "      WHEN 'SET DEFAULT' THEN "+String.valueOf(DatabaseMetaData.importedKeySetDefault)+"\r\n" +
-      "      WHEN 'RESTRICT' THEN "+String.valueOf(DatabaseMetaData.importedKeyRestrict)+"\r\n" +
+      "      WHEN 'NO ACTION' THEN "+ DatabaseMetaData.importedKeyNoAction +"\r\n" +
+      "      WHEN 'CASCADE' THEN "+ DatabaseMetaData.importedKeyCascade +"\r\n" +
+      "      WHEN 'SET NULL' THEN "+ DatabaseMetaData.importedKeySetNull +"\r\n" +
+      "      WHEN 'SET DEFAULT' THEN "+ DatabaseMetaData.importedKeySetDefault +"\r\n" +
+      "      WHEN 'RESTRICT' THEN "+ DatabaseMetaData.importedKeyRestrict +"\r\n" +
       "    END AS DELETE_RULE,\r\n" +
       "  KCU.CONSTRAINT_NAME AS FK_NAME,\r\n" +
       "  'PRIMARY' AS PK_NAME,\r\n" +
-      "  "+String.valueOf(DatabaseMetaData.importedKeyNotDeferrable)+" AS DEFERRABILITY\r\n" +
+      "  "+ DatabaseMetaData.importedKeyNotDeferrable +" AS DEFERRABILITY\r\n" +
       "FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE KCU\r\n" +
       " INNER JOIN INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS RC\r\n"+
       " ON(KCU.CONSTRAINT_NAME = RC.CONSTRAINT_NAME\r\n"+
@@ -451,7 +450,7 @@ public class MySqlDatabaseMetaData
     sbCondition.append(getNameCondition("KCU.REFERENCED_TABLE_NAME",table));
     if (sbCondition.length() > 0)
     {
-      sb.append(sbCondition.toString());
+      sb.append(sbCondition);
       sbCondition.append("\r\n");
     }
     // order according to the JDBC specification
@@ -497,7 +496,7 @@ public class MySqlDatabaseMetaData
 				"FROM INFORMATION_SCHEMA.PARAMETERS P, INFORMATION_SCHEMA.ROUTINES R\r\n");
 
 		// where clause criteria
-		ArrayList<String> whereClauseComponents = new ArrayList<String>();
+		ArrayList<String> whereClauseComponents = new ArrayList<>();
 		whereClauseComponents.add("R.ROUTINE_TYPE = 'FUNCTION'");
 		whereClauseComponents.add("R.ROUTINE_SCHEMA = P.SPECIFIC_SCHEMA");
 		whereClauseComponents.add("R.ROUTINE_NAME = P.SPECIFIC_NAME");
@@ -557,7 +556,7 @@ public class MySqlDatabaseMetaData
 				"FROM INFORMATION_SCHEMA.PARAMETERS P, INFORMATION_SCHEMA.ROUTINES R\r\n");
 
 		// where clause criteria
-		ArrayList<String> whereClauseComponents = new ArrayList<String>();
+		ArrayList<String> whereClauseComponents = new ArrayList<>();
 		whereClauseComponents.add("R.ROUTINE_TYPE = 'PROCEDURE'");
 		whereClauseComponents.add("R.ROUTINE_SCHEMA = P.SPECIFIC_SCHEMA");
 		whereClauseComponents.add("R.ROUTINE_NAME = P.SPECIFIC_NAME");
@@ -602,7 +601,7 @@ public class MySqlDatabaseMetaData
 				"FROM INFORMATION_SCHEMA.ROUTINES\r\n");
 
 		// where clause criteria
-		ArrayList<String> whereClauseComponents = new ArrayList<String>();
+		ArrayList<String> whereClauseComponents = new ArrayList<>();
 		whereClauseComponents.add("ROUTINE_TYPE = 'FUNCTION'");
 		if(schemaPattern != null) {
 			whereClauseComponents.add("ROUTINE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
@@ -645,7 +644,7 @@ public class MySqlDatabaseMetaData
 				"FROM INFORMATION_SCHEMA.ROUTINES\r\n");
 
 		// where clause criteria
-		ArrayList<String> whereClauseComponents = new ArrayList<String>();
+		ArrayList<String> whereClauseComponents = new ArrayList<>();
 		whereClauseComponents.add("ROUTINE_TYPE = 'PROCEDURE'");
 		if(schemaPattern != null) {
 			whereClauseComponents.add("ROUTINE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
@@ -691,7 +690,7 @@ public class MySqlDatabaseMetaData
 				+ "	INFORMATION_SCHEMA.SCHEMATA\r\n");
 		
 		// where clause criteria
-		ArrayList<String> whereClauseComponents = new ArrayList<String>();
+		ArrayList<String> whereClauseComponents = new ArrayList<>();
 		if(schemaPattern != null) {
 			whereClauseComponents.add("SCHEMA_NAME LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
 		}
@@ -763,9 +762,9 @@ public class MySqlDatabaseMetaData
       "  NUMERIC_SCALE AS DECIMAL_DIGITS,\r\n"+
       "  10 AS NUM_PREC_RADIX,\r\n"+
       "  CASE IS_NULLABLE\r\n"+
-      "    WHEN 'NO' THEN "+String.valueOf(columnNoNulls)+"\r\n"+
-      "    WHEN 'YES' THEN "+String.valueOf(columnNullable)+"\r\n"+
-      "    ELSE "+String.valueOf(columnNullableUnknown)+"\r\n"+
+      "    WHEN 'NO' THEN "+ columnNoNulls +"\r\n"+
+      "    WHEN 'YES' THEN "+ columnNullable +"\r\n"+
+      "    ELSE "+ columnNullableUnknown +"\r\n"+
       "  END AS NULLABLE,\r\n"+
       "  COLUMN_COMMENT AS REMARKS,\r\n"+
       "  COLUMN_DEFAULT AS COLUMN_DEF,\r\n"+
@@ -789,7 +788,7 @@ public class MySqlDatabaseMetaData
       "FROM INFORMATION_SCHEMA.COLUMNS\r\n");
 
 		// where clause criteria
-		ArrayList<String> whereClauseComponents = new ArrayList<String>();
+		ArrayList<String> whereClauseComponents = new ArrayList<>();
 		if(schemaPattern != null)
 			whereClauseComponents.add("TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern) + " ESCAPE '\\'");
 		if(tableNamePattern != null)
