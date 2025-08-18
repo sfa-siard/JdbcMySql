@@ -80,7 +80,23 @@ public class MySqlDatabaseMetaData
 	} /* supportsResultSetConcurrency */
 
 	/* ------------------------------------------------------------------------ */
-	/**
+
+    private void appendWhereClause(StringBuilder sb, ArrayList<String> whereClauseComponents) {
+        if(!whereClauseComponents.isEmpty()) {
+            StringBuilder sbWhereClause = new StringBuilder();
+            for(int i=0; i<whereClauseComponents.size(); i++) {
+                if(i>0) {
+                    sbWhereClause.append(" AND ");
+                }
+                sbWhereClause.append(whereClauseComponents.get(i));
+            }
+            sb.append("WHERE ");
+            sb.append(sbWhereClause);
+            sb.append("\r\n");
+        }
+    }
+
+    /**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -97,7 +113,7 @@ public class MySqlDatabaseMetaData
 				"    NON_UNIQUE,\r\n" +
 				"    INDEX_SCHEMA AS INDEX_QUALIFIER,\r\n" +
 				"    INDEX_NAME,\r\n" +
-				"    CASE INDEX_TYPE\r\n" + 
+				"    CASE INDEX_TYPE\r\n" +
 				"      WHEN 'BTREE' THEN "+String.valueOf(DatabaseMetaData.tableIndexClustered)+"\r\n"+
         "      WHEN 'HASH' THEN "+String.valueOf(DatabaseMetaData.tableIndexHashed)+"\r\n"+
 			  "      ELSE "+String.valueOf(DatabaseMetaData.tableIndexOther)+" END AS TYPE,\r\n" +
@@ -122,20 +138,9 @@ public class MySqlDatabaseMetaData
 		}
 		// we skip the approximate field
 
-		if(whereClauseComponents.size() != 0) {
-			StringBuilder sbWhereClause = new StringBuilder();
-			for(int i=0; i<whereClauseComponents.size(); i++) {
-				if(i>0) {
-					sbWhereClause.append(" AND ");
-				}
-				sbWhereClause.append(whereClauseComponents.get(i));
-			}
-			sb.append("WHERE ");
-			sb.append(sbWhereClause.toString());
-			sb.append("\r\n");
-		}
+        appendWhereClause(sb, whereClauseComponents);
 
-		// order according to the JDBC specification
+        // order according to the JDBC specification
 		sb.append("ORDER BY NON_UNIQUE, INDEX_TYPE, INDEX_NAME, ORDINAL_POSITION");
 
 		Statement stmt = getConnection().createStatement();
@@ -184,27 +189,16 @@ public class MySqlDatabaseMetaData
 			whereClauseComponents.add("TABLE_NAME LIKE " + SqlLiterals.formatStringLiteral(tableNamePattern));
 		}
 
-		if(whereClauseComponents.size() != 0) {
-			StringBuilder sbWhereClause = new StringBuilder();
-			for(int i=0; i<whereClauseComponents.size(); i++) {
-				if(i>0) {
-					sbWhereClause.append(" AND ");
-				}
-				sbWhereClause.append(whereClauseComponents.get(i));
-			}
-			sb.append("WHERE ");
-			sb.append(sbWhereClause.toString());
-			sb.append("\r\n");
-		}
+        appendWhereClause(sb, whereClauseComponents);
 
-		// order according to the JDBC specification
+        // order according to the JDBC specification
 		sb.append("ORDER BY TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, PRIVILEGE");
 
 		Statement stmt = this.getConnection().createStatement();
 		return stmt.unwrap(Statement.class).executeQuery(sb.toString());
 	} /* getTablePrivileges */
 
-	/* ------------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -517,16 +511,7 @@ public class MySqlDatabaseMetaData
 			whereClauseComponents.add("P.PARAMETER_NAME LIKE " + SqlLiterals.formatStringLiteral(columnNamePattern));
 		}
 
-		StringBuilder sbWhereClause = new StringBuilder();
-		for(int i=0; i<whereClauseComponents.size(); i++) {
-			if(i>0) {
-				sbWhereClause.append(" AND ");
-			}
-			sbWhereClause.append(whereClauseComponents.get(i));
-		}
-		sb.append("WHERE ");
-		sb.append(sbWhereClause.toString());
-		sb.append("\r\n");
+		appendWhereClause(sb, whereClauseComponents);
 
 		// order according to the JDBC specification
 		sb.append("ORDER BY FUNCTION_CAT, FUNCTION_SCHEM, FUNCTION_NAME, SPECIFIC_NAME, ORDINAL_POSITION");
@@ -586,16 +571,7 @@ public class MySqlDatabaseMetaData
 			whereClauseComponents.add("P.PARAMETER_NAME LIKE " + SqlLiterals.formatStringLiteral(columnNamePattern));
 		}
 
-		StringBuilder sbWhereClause = new StringBuilder();
-		for(int i=0; i<whereClauseComponents.size(); i++) {
-			if(i>0) {
-				sbWhereClause.append(" AND ");
-			}
-			sbWhereClause.append(whereClauseComponents.get(i));
-		}
-		sb.append("WHERE ");
-		sb.append(sbWhereClause.toString());
-		sb.append("\r\n");
+		appendWhereClause(sb, whereClauseComponents);
 
 		// order according to the JDBC specification
 		sb.append("ORDER BY PROCEDURE_CAT, PROCEDURE_SCHEM, PROCEDURE_NAME, SPECIFIC_NAME, ORDINAL_POSITION");
@@ -635,16 +611,7 @@ public class MySqlDatabaseMetaData
 			whereClauseComponents.add("ROUTINE_NAME LIKE " + SqlLiterals.formatStringLiteral(functionNamePattern));
 		}
 
-		StringBuilder sbWhereClause = new StringBuilder();
-		for(int i=0; i<whereClauseComponents.size(); i++) {
-			if(i>0) {
-				sbWhereClause.append(" AND ");
-			}
-			sbWhereClause.append(whereClauseComponents.get(i));
-		}
-		sb.append("WHERE ");
-		sb.append(sbWhereClause.toString());
-		sb.append("\r\n");
+        appendWhereClause(sb, whereClauseComponents);
 
 		// order according to the JDBC specification
 		sb.append("ORDER BY FUNCTION_CAT, FUNCTION_SCHEM, FUNCTION_NAME, SPECIFIC_NAME");
@@ -687,16 +654,7 @@ public class MySqlDatabaseMetaData
 			whereClauseComponents.add("ROUTINE_NAME LIKE " + SqlLiterals.formatStringLiteral(procedureNamePattern));
 		}
 
-		StringBuilder sbWhereClause = new StringBuilder();
-		for(int i=0; i<whereClauseComponents.size(); i++) {
-			if(i>0) {
-				sbWhereClause.append(" AND ");
-			}
-			sbWhereClause.append(whereClauseComponents.get(i));
-		}
-		sb.append("WHERE ");
-		sb.append(sbWhereClause.toString());
-		sb.append("\r\n");
+		appendWhereClause(sb, whereClauseComponents);
 
 		// order according to the JDBC specification
 		sb.append("ORDER BY PROCEDURE_CAT, PROCEDURE_SCHEM, PROCEDURE_NAME, SPECIFIC_NAME");
@@ -738,16 +696,7 @@ public class MySqlDatabaseMetaData
 			whereClauseComponents.add("SCHEMA_NAME LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
 		}
 
-		StringBuilder sbWhereClause = new StringBuilder();
-		for(int i=0; i<whereClauseComponents.size(); i++) {
-			if(i>0) {
-				sbWhereClause.append(" AND ");
-			}
-			sbWhereClause.append(whereClauseComponents.get(i));
-		}
-		sb.append("WHERE ");
-		sb.append(sbWhereClause.toString());
-		sb.append("\r\n");
+		appendWhereClause(sb, whereClauseComponents);
 
 		// order according to the JDBC specification
 		sb.append("ORDER BY TABLE_CATALOG, TABLE_SCHEM");
@@ -848,21 +797,9 @@ public class MySqlDatabaseMetaData
 		if (columnNamePattern != null)
 		  whereClauseComponents.add("COLUMN_NAME LIKE "+SqlLiterals.formatStringLiteral(columnNamePattern));
 
-		if(whereClauseComponents.size() != 0) 
-		{
-			StringBuilder sbWhereClause = new StringBuilder();
-			for(int i=0; i<whereClauseComponents.size(); i++) 
-			{
-				if(i>0)
-					sbWhereClause.append(" AND ");
-				sbWhereClause.append(whereClauseComponents.get(i));
-			}
-			sb.append("WHERE ");
-			sb.append(sbWhereClause.toString());
-			sb.append("\r\n");
-		}
+        appendWhereClause(sb, whereClauseComponents);
 
-		// order according to the JDBC specification
+        // order according to the JDBC specification
 		sb.append("ORDER BY TABLE_CAT, TABLE_SCHEM, TABLE_NAME, ORDINAL_POSITION");
 		
 		Statement stmt = this.getConnection().createStatement();
@@ -932,20 +869,9 @@ public class MySqlDatabaseMetaData
 			whereClauseComponents.add("t.TABLE_TYPE IN (" + typeList + ")");
 		}
 
-		if(whereClauseComponents.size() != 0) {
-			StringBuilder sbWhereClause = new StringBuilder();
-			for(int i=0; i<whereClauseComponents.size(); i++) {
-				if(i>0) {
-					sbWhereClause.append(" AND ");
-				}
-				sbWhereClause.append(whereClauseComponents.get(i));
-			}
-			sb.append("WHERE ");
-			sb.append(sbWhereClause.toString());
-			sb.append("\r\n");
-		}
+        appendWhereClause(sb, whereClauseComponents);
 
-		// order according to the JDBC specification
+        // order according to the JDBC specification
 		sb.append("ORDER BY t.TABLE_TYPE, t.TABLE_CATALOG, t.TABLE_SCHEMA, t.TABLE_NAME");
 
 		Statement stmt = this.getConnection().createStatement();
