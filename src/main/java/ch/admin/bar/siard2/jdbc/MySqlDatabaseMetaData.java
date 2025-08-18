@@ -842,7 +842,7 @@ public class MySqlDatabaseMetaData
 		// where clause criteria
 		ArrayList<String> whereClauseComponents = new ArrayList<String>();
 		if(schemaPattern != null)
-			whereClauseComponents.add("TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
+			whereClauseComponents.add("TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern) + " ESCAPE '\\'");
 		if(tableNamePattern != null)
 			whereClauseComponents.add("TABLE_NAME LIKE " + SqlLiterals.formatStringLiteral(tableNamePattern) + " ESCAPE '\\'");
 		if (columnNamePattern != null)
