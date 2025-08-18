@@ -918,18 +918,18 @@ public class MySqlDatabaseMetaData
 
 		// type criteria
 		if(types != null) {
-			String sTypeList = "";
+			String typeList = "";
 			for(int i=0; i<types.length; i++) {
 				if(types[i].equals("TABLE")) {
-					sTypeList += SqlLiterals.formatStringLiteral("BASE TABLE");
+					typeList += SqlLiterals.formatStringLiteral("BASE TABLE");
 				} else {
-					sTypeList += SqlLiterals.formatStringLiteral(types[i]);
+					typeList += SqlLiterals.formatStringLiteral(types[i]);
 				}
 				if(i != types.length-1) {
-					sTypeList += ",";
+					typeList += ",";
 				}
 			}
-			whereClauseComponents.add("t.TABLE_TYPE IN (" + sTypeList + ")");
+			whereClauseComponents.add("t.TABLE_TYPE IN (" + typeList + ")");
 		}
 
 		if(whereClauseComponents.size() != 0) {
