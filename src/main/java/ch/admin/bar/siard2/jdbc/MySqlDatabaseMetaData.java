@@ -846,10 +846,10 @@ public class MySqlDatabaseMetaData
 		whereClauseComponents.add("t.TABLE_SCHEMA NOT LIKE 'performance_schema'");
 
 		if(schemaPattern != null) {
-			whereClauseComponents.add("t.TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
+			whereClauseComponents.add("t.TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern) + " ESCAPE '\\'");
 		}
 		if(tableNamePattern != null) {
-			whereClauseComponents.add("t.TABLE_NAME LIKE " + SqlLiterals.formatStringLiteral(tableNamePattern));
+			whereClauseComponents.add("t.TABLE_NAME LIKE " + SqlLiterals.formatStringLiteral(tableNamePattern) + " ESCAPE '\\'");
 		}
 
 		// type criteria
