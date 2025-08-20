@@ -15,7 +15,6 @@ import java.util.*;
 import ch.enterag.utils.jdbc.*;
 import ch.enterag.sqlparser.*;
 
-/* =============================================================================== */
 /**
  * MySqlDatabaseMetaData implements a wrapped MySql DatabaseMetaData
  * @author Simon Jutz
@@ -33,28 +32,27 @@ public class MySqlDatabaseMetaData
 	{
 		super(dmdWrapped);
 		_conn = conn;
-	} /* constructor */
+	}
 
-  /*------------------------------------------------------------------*/
-  /** {@inheritDoc} */
-  @Override
-  public Connection getConnection() {
-    return _conn;
-  } /* getConnection */
-  
-	/* ------------------------------------------------------------------------ */
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ResultSet getBestRowIdentifier(String catalog, String schema, String table, int scope, boolean nullable) throws SQLException {
-		if (catalog != null) {
-			throw new SQLException("MySQL does not support catalogs, argument must be NULL.");
-		}
-		return super.getBestRowIdentifier(schema, catalog, table, scope, nullable);
-	} /* getBestRowIdentifier */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Connection getConnection() {
+        return _conn;
+    }
 
-	/* ------------------------------------------------------------------------ */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ResultSet getBestRowIdentifier(String catalog, String schema, String table, int scope, boolean nullable) throws SQLException {
+        if (catalog != null) {
+            throw new SQLException("MySQL does not support catalogs, argument must be NULL.");
+        }
+        return super.getBestRowIdentifier(schema, catalog, table, scope, nullable);
+    }
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -67,18 +65,15 @@ public class MySqlDatabaseMetaData
 		else
 			throw new SQLException("MySQL does not support catalogs, argument must be NULL.");
 		return rs; 
-	} /* getVersionColumns */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean supportsResultSetConcurrency(int type, int concurrency) throws SQLException {
 		return super.supportsResultSetConcurrency(type, concurrency);
-	} /* supportsResultSetConcurrency */
-
-	/* ------------------------------------------------------------------------ */
+	}
 
     private void appendWhereClause(StringBuilder sb, ArrayList<String> whereClauseComponents) {
         if(!whereClauseComponents.isEmpty()) {
@@ -144,9 +139,8 @@ public class MySqlDatabaseMetaData
 
 		Statement stmt = getConnection().createStatement();
 		return stmt.unwrap(Statement.class).executeQuery(sb.toString());
-	} /* getIndexInfo */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -156,9 +150,8 @@ public class MySqlDatabaseMetaData
 			throw new SQLException("MySQL does not support catalogs, argument must be NULL.");
 		}
 		return super.getColumnPrivileges(schema, catalog, table, columnNamePattern);
-	} /* getColumnPrivileges */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -195,9 +188,8 @@ public class MySqlDatabaseMetaData
 
 		Statement stmt = this.getConnection().createStatement();
 		return stmt.unwrap(Statement.class).executeQuery(sb.toString());
-	} /* getTablePrivileges */
+	}
 
-    /* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -227,9 +219,8 @@ public class MySqlDatabaseMetaData
     sb.append("ORDER BY COLUMN_NAME");
     Statement stmt = this.getConnection().createStatement();
     return stmt.unwrap(Statement.class).executeQuery(sb.toString());
-	} /* getPrimaryKeys */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -239,9 +230,8 @@ public class MySqlDatabaseMetaData
 			throw new SQLException("MySQL does not support catalogs, argument must be NULL.");
 		}
 		return super.getAttributes(schemaPattern, catalog, typeNamePattern, attributeNamePattern);
-	} /* getAttributes */
+	}
 
-  /* ------------------------------------------------------------------------ */
 	private String getNameCondition(String sColumn, String sName)
 	{
 	  StringBuilder sbCondition = new StringBuilder();
@@ -265,9 +255,8 @@ public class MySqlDatabaseMetaData
       sbCondition.append("\r\n");
     }
     return sbCondition.toString();
-	} /* getNameCondition */
-	
-  /* ------------------------------------------------------------------------ */
+	}
+
   /**
    * {@inheritDoc}
    */
@@ -345,9 +334,8 @@ public class MySqlDatabaseMetaData
         // "ORDER BY TC.TABLE_SCHEMA, TC.TABLE_NAME,KCU.POSITION_IN_UNIQUE_CONSTRAINT";
     Statement stmt = this.getConnection().createStatement();
     return stmt.unwrap(Statement.class).executeQuery(sSql);
-  } /* getCrossReference */
+  }
 
-  /* ------------------------------------------------------------------------ */
   /**
    * {@inheritDoc}
    */
@@ -401,9 +389,8 @@ public class MySqlDatabaseMetaData
     sb.append("ORDER BY KCU.REFERENCED_TABLE_SCHEMA, KCU.REFERENCED_TABLE_NAME, KCU.POSITION_IN_UNIQUE_CONSTRAINT");
     Statement stmt = this.getConnection().createStatement();
     return stmt.unwrap(Statement.class).executeQuery(sb.toString());
-  } /* getImportedKeys */
+  }
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -457,9 +444,8 @@ public class MySqlDatabaseMetaData
     sb.append("ORDER BY KCU.TABLE_SCHEMA, KCU.TABLE_NAME, KCU.POSITION_IN_UNIQUE_CONSTRAINT");
     Statement stmt = this.getConnection().createStatement();
     return stmt.unwrap(Statement.class).executeQuery(sb.toString());
-	} /* getExportedKeys */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -517,9 +503,8 @@ public class MySqlDatabaseMetaData
 		
 		Statement stmt = this.getConnection().createStatement();
 		return new MySqlMetaColumns(stmt.unwrap(Statement.class).executeQuery(sb.toString()), 6, 7, 8, 9, _conn);
-	} /* getFunctionColumns */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -577,9 +562,8 @@ public class MySqlDatabaseMetaData
 		
 		Statement stmt = this.getConnection().createStatement();
 		return new MySqlMetaColumns(stmt.unwrap(Statement.class).executeQuery(sb.toString()), 6, 7, 8, 9, _conn);
-	} /* getProcedureColumns */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -617,9 +601,8 @@ public class MySqlDatabaseMetaData
 		
 		Statement stmt = this.getConnection().createStatement();
 		return stmt.unwrap(Statement.class).executeQuery(sb.toString());
-	} /* getFunctions */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -660,9 +643,8 @@ public class MySqlDatabaseMetaData
 		
 		Statement stmt = this.getConnection().createStatement();
 		return stmt.unwrap(Statement.class).executeQuery(sb.toString());
-	} /* getProcedures */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@Override}
 	 */
@@ -671,9 +653,8 @@ public class MySqlDatabaseMetaData
 		String sSql = "SELECT SCHEMA_NAME AS TABLE_SCHEM, NULL AS TABLE_CATALOG FROM INFORMATION_SCHEMA.SCHEMATA";
 		Statement stmt = this.getConnection().createStatement();
 		return stmt.unwrap(Statement.class).executeQuery(sSql);
-	} /* getSchemas */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -702,9 +683,8 @@ public class MySqlDatabaseMetaData
 		
 		Statement stmt = this.getConnection().createStatement();
 		return stmt.unwrap(Statement.class).executeQuery(sb.toString());
-	} /* getSchemas */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -714,9 +694,8 @@ public class MySqlDatabaseMetaData
 			throw new SQLException("MySQL does not support catalogs, argument must be NULL.");
 		}
 		return super.getSuperTables(schemaPattern, catalog, tableNamePattern);
-	} /* getSuperTables */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -726,9 +705,8 @@ public class MySqlDatabaseMetaData
 			throw new SQLException("MySQL does not support catalogs, argument must be NULL.");
 		}
 		return super.getSuperTypes(schemaPattern, catalog, typeNamePattern);
-	} /* getSuperTypes */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 * @throws SQLException 
@@ -803,9 +781,8 @@ public class MySqlDatabaseMetaData
 		
 		Statement stmt = this.getConnection().createStatement();
         return new MySqlMetaColumns(stmt.unwrap(Statement.class).executeQuery(sb.toString()), 5, 6, 7, 7, _conn);
-	} /* getColumns */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -875,9 +852,8 @@ public class MySqlDatabaseMetaData
 
 		Statement stmt = this.getConnection().createStatement();
 		return stmt.unwrap(Statement.class).executeQuery(sb.toString());
-	} /* getTables */
+	}
 
-	/* ------------------------------------------------------------------------ */
 	/**
 	 * {@inheritDoc}
 	 */
@@ -887,7 +863,5 @@ public class MySqlDatabaseMetaData
 			throw new SQLException("MySQL does not support catalogs, argument must be NULL.");
 		}
 		return super.getUDTs(schemaPattern, catalog, typeNamePattern, types);
-	} /* getUDTs */
-
-
-} /* class MySqlDatabaseMetaData */
+    }
+}
